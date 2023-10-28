@@ -1,0 +1,47 @@
+{include file="show/header" /}
+
+<body class="d-flex h-100 text-center text-white bg-dark">
+  <div class="container py-5">
+    <div class="container mx-auto position-absolute top-50 start-50 translate-middle">
+      <div class="pricing-header p-3 pb-md-4 text-center">
+        <h1 class="display-4 fw-normal" style="font-size: 80px;" id="text">比赛排名</h1>
+      </div>
+
+      <table class="table table-bordered fs-2 text-center text-white mx-auto border-5;" style="background-color: rgba(60,68,169,0.8);" id='tb'>
+    <thead>
+      <tr>
+        <th scope="col">选手排名</th>
+        <th scope="col">选手名称</th>
+        <th scope="col">选手序号</th>
+        <th scope="col">选手最终得分</th>
+        <th scope="col">选手顺序</th>
+      </tr>
+    </thead>
+    <tbody>
+        {foreach $rank_content as $v}
+        <tr style='border: 2.5px solid white;'>
+            <td style='border: 2.5px solid white;'>{$v['rank']}</td>
+            <td style='border: 2.5px solid white;'>{$v['pname']}</td>
+            <td style='border: 2.5px solid white;'>{$v['pid']}</td>
+            <td style='border: 2.5px solid white;'>{$v['point']}</td>
+            <td style='border: 2.5px solid white;'>{$v['sequence']}</td>
+        </tr>
+        {/foreach}
+    </tbody>
+</table>
+    </div>
+  </div>
+    <script>
+        window.onload=function()
+        {
+            setInterval("getReload({$cid},'index',{'screen_page':'{$screen_page}','screen_page_content':'{$screen_page_content}'})",3000);
+        }
+        function MsgFunc(){
+            
+        }
+    </script>
+
+
+
+
+{include file="show/tail" /}

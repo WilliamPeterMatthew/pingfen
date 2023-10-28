@@ -1,0 +1,94 @@
+{include file="index/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div id="admin" class="mdui-typo">
+        <h1 class="mdui-text-color-theme">{$page_title} - 管理站点</h1>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">settings</i>登录管理后台</h2>
+                <p>&emsp;&emsp;在您初次安装好此站点后，您已经在网站文件夹根目录下建立<code>.env</code>文件，并且导入了数据库文件<code>pingfen.sql</code>。</p>
+                <p>&emsp;&emsp;接下来，您应该在右上角可以看到<i class="mdui-icon material-icons">settings</i>图标，点击后可以进入管理后台的登录页面。我们已经在数据库中添加了一个超级管理员，账号是<code>superadmin</code>，密码是<code>12345678</code>。<b>请及时修改默认的账号及密码，任何能看到此{$page_title}的访问者均会知道此账号和密码。</b></p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">perm_contact_calendar</i>管理员档案</h2>
+                <p>&emsp;&emsp;现在点击右上角的<i class="mdui-icon material-icons">perm_contact_calendar</i>进入管理员档案页面，可以在这里修改管理员的信息，点击<i class="mdui-icon material-icons">build</i>可以返回管理员页面。</p>
+                <p>&emsp;&emsp;权限中的数字表示可以管理的比赛的ID，多个比赛间用英文半角逗号“,”分隔。-1表示为网站全局管理员，可以管理网站后台和所有比赛。如需修改请到 站点后台 - 管理员列表 选择此管理员进行修改。</p>
+                <p>&emsp;&emsp;<em>此页面也可在每个比赛的控制页面进入。</em></p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">settings_applications</i>站点设置</h2>
+                <p>&emsp;&emsp;修改完管理员信息后，你可以在<i class="mdui-icon material-icons">settings_applications</i>站点设置里修改站点的相关信息，留空的设置将使用在<code>.env</code>文件中的环境变量。</p>
+                <p>&emsp;&emsp;<b>请注意，上传图片后，页面将会刷新，请及时保存相关信息。</b></p>
+    </div>
+    <div id="pre" class="mdui-typo">
+        <h1 class="mdui-text-color-theme">{$page_title} - 赛前准备</h1>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">explore</i>新建比赛</h2>
+                <p>&emsp;&emsp;在修改完比赛的相关设置后，请点击<i class="mdui-icon material-icons">explore</i>比赛列表，准备比赛。</p>
+                <p>&emsp;&emsp;在此页面，你可以<i class="mdui-icon material-icons">add</i>新增比赛、<i class="mdui-icon material-icons">edit</i>修改已有比赛、<i class="mdui-icon material-icons">delete</i>删除比赛、<i class="mdui-icon material-icons">delete_sweep</i>选择多个比赛并批量删除比赛，也可以直接进入比赛控制页面的<i class="mdui-icon material-icons">devices</i><i class="mdui-icon material-icons">settings_applications</i><i class="mdui-icon material-icons">list</i><i class="mdui-icon material-icons">group</i><i class="mdui-icon material-icons">person</i>五个页面，点击<i class="mdui-icon material-icons">expand_less</i>和<i class="mdui-icon material-icons">expand_more</i>可以修改排序，该排序不会影响首页的显示顺序。</p>
+                <p>&emsp;&emsp;现在，新增一个比赛，选择填写相关信息，图片相关的内容可在比赛建立后修改。你也可以新建比赛后，由比赛管理员在比赛控制页面的<i class="mdui-icon material-icons">settings_applications</i>比赛设置页面修改相关信息。新建后，请复制比赛序号，我们稍后会用到它。</p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">face</i>新增管理员</h2>
+                <p>&emsp;&emsp;理论上，您可以使用超级管理员控制每一场比赛，但是为了安全起见，我们并不建议这么做。新建比赛后，请移至<i class="mdui-icon material-icons">face</i>管理员列表，准备管理员。</p>
+                <p>&emsp;&emsp;在此页面，你可以<i class="mdui-icon material-icons">add</i>新增管理员、<i class="mdui-icon material-icons">edit</i>修改已有管理员、<i class="mdui-icon material-icons">delete</i>删除管理员、<i class="mdui-icon material-icons">delete_sweep</i>选择多个管理员并批量删除管理员，点击<i class="mdui-icon material-icons">expand_less</i>和<i class="mdui-icon material-icons">expand_more</i>可以修改排序。</p>
+                <p>&emsp;&emsp;现在，你可以选择新建一个管理员，或给已有的管理员添加权限。使一个普通管理员可以控制比赛的方法是在权限填入比赛序号，多个比赛间用英文半角逗号“,”分隔。</p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">group</i>新建评委</h2>
+                <p>&emsp;&emsp;现在，使用有权限的管理员账号进入比赛管理页面，点击<i class="mdui-icon material-icons">group</i>评委列表，准备评委。</p>
+                <p>&emsp;&emsp;在此页面，你可以<i class="mdui-icon material-icons">add</i>新增评委、<i class="mdui-icon material-icons">edit</i>修改已有评委、<i class="mdui-icon material-icons">delete</i>删除评委、<i class="mdui-icon material-icons">delete_sweep</i>选择多个评委并批量删除评委，点击<i class="mdui-icon material-icons">expand_less</i>和<i class="mdui-icon material-icons">expand_more</i>可以修改排序。同时，你可以点击<i class="mdui-icon material-icons">content_copy</i>复制评委的登录码，也可以点击<i class="mdui-icon material-icons">border_clear</i>查看评委的登录地址及登录二维码。另外，你也可以点击<i class="mdui-icon material-icons">sync</i>同步单个评委或<i class="mdui-icon material-icons">refresh</i>同步所有评委的页面，评委的页面会立即与<i class="mdui-icon material-icons">devices</i>现场控制中的评委当前页面同步。</p>
+                <p>&emsp;&emsp;现在，你可以开始将评委信息补全了。</p>
+                <blockquote>
+                    <p>评委项中的评委名称不会在环境中使用，仅用来备注。</p>
+                </blockquote>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">person</i>新建选手</h2>
+                <p>&emsp;&emsp;现在，使用有权限的管理员账号进入比赛管理页面，点击<i class="mdui-icon material-icons">person</i>选手列表，准备选手。</p>
+                <p>&emsp;&emsp;在此页面，你可以<i class="mdui-icon material-icons">add</i>新增选手、<i class="mdui-icon material-icons">edit</i>修改已有选手、<i class="mdui-icon material-icons">delete</i>删除选手、<i class="mdui-icon material-icons">delete_sweep</i>选择多个选手并批量删除选手，点击<i class="mdui-icon material-icons">expand_less</i>和<i class="mdui-icon material-icons">expand_more</i>可以修改排序。同时，你可以点击<i class="mdui-icon material-icons">youtube_searched_for</i>计算选手的最后得分，计算后，选手的排名将被清零。另外，你可以点击计算按钮，计算所有选手的分数及排名。<i class="mdui-icon material-icons">file_download</i>导出成绩按钮可以将选手列表的表格导出成csv格式的表格。</p>
+                <p>&emsp;&emsp;现在，你可以开始将选手信息补全了。</p>
+                <blockquote>
+                    <p>选手项中的选手顺序不会在环境中使用，仅用来备注，管理员可以提前写好顺序，方便在比赛时参考输入选手序号。</p>
+                    <p>另外，选手项中不提供启用开关，如果管理员不想在比赛中使用某个选手，只需要不使用该选手的序号即可。</p>
+                </blockquote>
+    </div>
+    <div id="control" class="mdui-typo">
+        <h1 class="mdui-text-color-theme">{$page_title} - 赛时控制</h1>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">devices</i>现场控制</h2>
+                <p>&emsp;&emsp;在比赛开始前，请转到<i class="mdui-icon material-icons">devices</i>现场控制页面，将评委的目前页面切换到等待评分第一组选手（例如等待评分: 1,2,3），评委的下一个页面切换到正在评分第一组选手（例如正在评分: 1,2,3），屏幕页面切换到背景。</p>
+                <p>&emsp;&emsp;在此页面，最主要的两个功能是控制评委页面和屏幕页面。</p>
+                <h3>评委页面</h3>
+                    <p>&emsp;&emsp;评委页面分为目前页面和下一个页面，以及选择再下一个页面的表单。表单中，如果选择结束评分，则不需要填写页面内容，其他页面需要填写选手序号，多个选手序号间用英文半角逗号“,”分隔。</p>
+                    <p>&emsp;&emsp;提交的逻辑是，此页面会提交再下一个页面到服务器，服务器先用下一个页面替换目前页面的值，再用刚提交的再下一个页面替换下一个页面的值。
+                    <p class="mdui-text-center"><b>目前页面 <— 下一个页面 | 下一个页面 <— 再下一个页面</b></p>
+                    <p>&emsp;&emsp;设计两个页面是为了在评委提交评分后，自动跳转到下一个页面，而不会出现空缺页面的情况。</p>
+                <h3>屏幕页面</h3>
+                    <p>&emsp;&emsp;屏幕页面只有目前页面，以及选择再下一个页面的表单。表单中，如果选择背景，则不需要填写页面内容，其他页面需要填写选手序号，详细页面只能填写单个选手序号（填写多个只会取第一个选手的序号），另外两个页面可填写多个选手序号，多个选手序号间用英文半角逗号“,”分隔。排名页面的选手序号为排名。</p>
+                    <p>&emsp;&emsp;提交的逻辑是，此页面会提交下一个页面到服务器，服务器用刚提交的下一个页面替换目前页面的值。
+                    <p class="mdui-text-center"><b>目前页面 <— 下一个页面</b></p>
+                    <p>&emsp;&emsp;背景页面只有一张背景图片，可别于其他三个页面设置图片。详细页面会详细展示一个选手的打分情况，分组页面用于在比赛中展示一些选手的目前得分，排名页面用于在比赛后展示选手的排名。</p>
+                <h3>赛时工作</h3>
+                    <p>&emsp;&emsp;在比赛时，管理员跟随比赛的进程切换评委页面及屏幕页面。</p>
+                    <p>&emsp;&emsp;评委目前页面在正在评分时，下方会展示出每个评委对于每个选手的评分状态，但所有评委完成对每个选手的评分后，评委页面会自动切换，同时后台会计算选手分数。</p>
+                    <p>&emsp;&emsp;评委目前页面在结束评分时，下方会显示计算排名按钮，管理员可以点击计算分数及排名，也可以在<i class="mdui-icon material-icons">person</i>选手列表点击计算按钮计算分数及排名。</p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">account_circle</i>评委登录</h2>
+                <p>&emsp;&emsp;评委根据赛前提供的登录地址、登录码或二维码扫描进入比赛。（如果误进入其他评委的页面，可点击右上角退出登录后重新进入。）</p>
+                <p>&emsp;&emsp;在比赛里，评委会先进入比赛等待评分页面，当后台指令切换后，评委会进入正在评分页面，当给所有选手评分结束后，会进入结束评分界面。</p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">cast</i>大屏幕页面</h2>
+                <p>&emsp;&emsp;屏幕页面是为现场的电子屏幕准备的，可以由后台指令切换。</p>
+                <p>&emsp;&emsp;在比赛中途或结束，可能需要展示某个选手的详细打分、某些选手的分数以及排名，这时候可以选择对应的页面，屏幕会自动切换。</p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">mic</i>主持人页面</h2>
+                <p>&emsp;&emsp;主持页面是给现场主持人的一个手持端，主持人不需要回头看大屏幕，只需查看手机即可知道评委页面和屏幕页面及其内容。</p>
+                <p>&emsp;&emsp;在评委打分时，评委的评分状态也会实时传给主持人，可以供主持人提醒评委。</p>
+    </div>
+    <div id="post" class="mdui-typo">
+        <h1 class="mdui-text-color-theme">{$page_title} - 赛后工作</h1>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">list</i>分数导出</h2>
+                <p>&emsp;&emsp;点击<i class="mdui-icon material-icons">list</i>分数列表，进入页面。</p>
+                <p>&emsp;&emsp;在此页面，你可以<i class="mdui-icon material-icons">delete</i>删除分数、<i class="mdui-icon material-icons">delete_sweep</i>选择多个分数并批量删除分数，点击<i class="mdui-icon material-icons">expand_less</i>和<i class="mdui-icon material-icons">expand_more</i>可以修改排序。为尽可能保障比赛公平，<b>比赛后台无法直接修改分数</b>，仅能删除。如需修改，请通过数据库后台修改，或删除分数后修改<i class="mdui-icon material-icons">devices</i>现场控制中的评委页面，在<i class="mdui-icon material-icons">group</i>评委列表同步对应评委的页面，然后通过评委端重新打分。</p>
+                <p>&emsp;&emsp;现在，你可以点击<i class="mdui-icon material-icons">file_download</i>导出分数按钮将分数列表的表格导出成csv格式的表格。</p>
+            <h2 class="mdui-text-color-theme-accent"><i class="mdui-icon material-icons">person</i>排名导出</h2>
+                <p>&emsp;&emsp;点击<i class="mdui-icon material-icons">person</i>选手列表，进入页面。</p>
+                <p>&emsp;&emsp;现在，你可以点击<i class="mdui-icon material-icons">file_download</i>导出成绩按钮将选手列表的表格导出成csv格式的表格。</p>
+    </div>
+    <br>
+</div>
+
+
+
+
+{include file="index/tail" /}

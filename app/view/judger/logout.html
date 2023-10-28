@@ -1,0 +1,35 @@
+{include file="judger/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">您确定要退出吗？</div>
+            <div class="mdui-card-primary-subtitle">退出后需要重新登录。</div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div style="font-size:24px;margin: 0 auto;">您已经登录的身份是{if $usertype == 'judger'}评委，ID为{$jid}，<b>您确定要退出吗</b>？{/if}</div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="logoutapilogout()"><i class="mdui-icon material-icons">exit_to_app</i> 退出登录 </button>
+            <button class="mdui-btn mdui-color-theme mdui-ripple mdui-center mdui-btn-raised" onclick="history.back()"><i class="mdui-icon material-icons">keyboard_arrow_left</i> 返回上一页 </button>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        function logoutapilogout(){
+            var link = "/contest{$cid}/judger/logoutapilogout";
+            window.location.assign(link);
+        }
+    </script>
+
+
+
+
+{include file="judger/tail" /}

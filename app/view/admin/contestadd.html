@@ -1,0 +1,263 @@
+{include file="admin/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-icon" mdui-dialog="{target: '#canceladd'}"><i class="mdui-icon material-icons">keyboard_arrow_left</i></button>    添加比赛
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:39%;margin:auto;">
+                <i class="mdui-icon material-icons">label</i>
+                <label class="mdui-textfield-label">比赛序号</label>
+                <textarea class="mdui-textfield-input" id="cid" name="cid" type="text" pattern="[0-9]+"></textarea>
+                <div class="mdui-textfield-helper">比赛序号需要为正整数且不能与现有比赛重复，留空自动生成</div>
+                <div class="mdui-textfield-error">比赛序号需要为正整数且不能与现有比赛重复，留空自动生成</div>
+            </div>
+            <br>
+            <div style="width:29%;margin:auto;">是否去掉最低最高分
+                <label class="mdui-switch">
+                    <input id="min_max_mode" name="min_max_mode" type="checkbox" checked/>
+                    <i class="mdui-switch-icon"></i>
+                </label>
+            </div>
+            <br>
+            <div style="width:29%;margin:auto;">是否启用
+                <label class="mdui-switch">
+                    <input id="enable" name="enable" type="checkbox" checked/>
+                    <i class="mdui-switch-icon"></i>
+                </label>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:99%;margin:auto;">
+                <i class="mdui-icon material-icons">label_outline</i>
+                <label class="mdui-textfield-label">比赛名称</label>
+                <textarea class="mdui-textfield-input" id="cname" name="cname" type="text"></textarea>
+                <div class="mdui-textfield-helper">留空则使用全局设置项的站点名称：{$site_name}</div>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-valign" style="width:49%;margin:auto;">
+                <div class="mdui-textfield mdui-textfield-floating-label" style="width:69%;margin:auto;">
+                    <i class="mdui-icon material-icons">pie_chart_outlined</i>
+                    <label class="mdui-textfield-label">比赛颜色</label>
+                    <textarea class="mdui-textfield-input" id="ccolor" name="ccolor" type="text" disabled></textarea>
+                    <div class="mdui-textfield-helper">留空则使用全局设置项的站点颜色： <span class="mdui-color-{$site_color} mdui-text-color-{$site_color}">site</span> {$site_color}</div>
+                </div>
+                <button class="mdui-btn mdui-color-theme-accent mdui-left mdui-ripple mdui-btn-raised" mdui-dialog="{target: '#selectcolor'}">选择颜色</button>
+                <div class="mdui-dialog" id="selectcolor">
+                    <div class="mdui-dialog-title">请选择比赛颜色</div>
+                    <div class="mdui-dialog-content">
+                        <div class="mdui-row-xs-1 mdui-row-sm-2 mdui-row-md-3">
+                            <div class="mdui-col">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="scolor" name="scolor" value="null" checked/>
+                                    <i class="mdui-radio-icon"></i>
+                                    留空
+                                </label>
+                            </div>
+                            {foreach $color_list as $v}
+                            <div class="mdui-col mdui-color-{$v} mdui-center">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="scolor" name="scolor" value="{$v}"/>
+                                    <i class="mdui-radio-icon"></i>
+                                    {$v}
+                                </label>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="mdui-dialog-actions">
+                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="SelectColor()">选择</button>
+                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                    </div>
+                </div>
+                <div style="width:19%;"></div>
+            </div>
+            <div class="mdui-valign" style="width:49%;margin:auto;">
+                <div class="mdui-textfield mdui-textfield-floating-label" style="width:69%;margin:auto;">
+                    <i class="mdui-icon material-icons">pie_chart</i>
+                    <label class="mdui-textfield-label">比赛强调色</label>
+                    <textarea class="mdui-textfield-input" id="caccent_color" name="caccent_color" type="text" disabled></textarea>
+                    <div class="mdui-textfield-helper">留空则使用全局设置项的站点强调色： <span class="mdui-color-{$site_accent_color}-accent mdui-text-color-{$site_accent_color}-accent">site</span> {$site_accent_color}</div>
+                </div>
+                <button class="mdui-btn mdui-color-theme-accent mdui-left mdui-ripple mdui-btn-raised" mdui-dialog="{target: '#selectaccentcolor'}">选择颜色</button>
+                <div class="mdui-dialog" id="selectaccentcolor">
+                    <div class="mdui-dialog-title">请选择比赛颜色</div>
+                    <div class="mdui-dialog-content">
+                        <div class="mdui-row-xs-1 mdui-row-sm-2 mdui-row-md-3">
+                            <div class="mdui-col">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="saccent_color" name="saccent_color" value="null" checked/>
+                                    <i class="mdui-radio-icon"></i>
+                                    留空
+                                </label>
+                            </div>
+                            {foreach $accent_color_list as $v}
+                            <div class="mdui-col mdui-color-{$v}-accent">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="saccent_color" name="saccent_color" value="{$v}"/>
+                                    <i class="mdui-radio-icon"></i>
+                                    {$v}
+                                </label>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="mdui-dialog-actions">
+                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="SelectAccentColor()">选择</button>
+                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                    </div>
+                </div>
+                <div style="width:19%;"></div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" mdui-dialog="{target: '#submitadd'}">提交</button>
+            <div class="mdui-dialog" id="canceladd">
+                <div class="mdui-dialog-title">确认返回吗？</div>
+                <div class="mdui-dialog-content">所做的修改不会保存</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="pageback()">确定</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+            <div class="mdui-dialog" id="submitadd">
+                <div class="mdui-dialog-title">确认提交吗？</div>
+                <div class="mdui-dialog-content">这将立即影响数据。</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="contestaddapiadd()">提交</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <i class="mdui-icon material-icons">donut_small</i>比赛网标 、 <i class="mdui-icon material-icons">donut_large</i>比赛图标 、 <i class="mdui-icon material-icons">photo_size_select_small</i>屏幕背景图片 和 <i class="mdui-icon material-icons">photo_size_select_large</i>屏幕背景页面背景图片 
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign" style="text-align:center;">
+            <font size="4" style="margin:10px">将使用全局设置项中的值，如需修改，请在比赛创建后进行编辑。</font>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg('contestadd');
+        }
+        function MsgFunc(){
+            
+        }
+        function MsgFunc2(){
+            getMsg('contestadd');
+        }
+        function MsgFunc2_(){
+            window.location.assign('/admin/contests');
+        }
+        function pageback(){
+            httpGet('/admin/contests');
+        }
+        function ModColor(color=null){
+            var objcolor = document.getElementById("ccolor");
+            var classList=objcolor.classList;
+            var precolor=objcolor.value;
+            console.log(color);
+            if(precolor.length==0){
+                if(color!=null){
+                    classList.add('mdui-color-'+color);
+                }
+            }
+            else{
+                if(color==null){
+                    classList.remove('mdui-color-'+precolor);
+                }
+                else{
+                    classList.replace('mdui-color-'+precolor,'mdui-color-'+color);
+                }
+            }
+            objcolor.value = color;
+            mdui.updateTextFields();
+            mdui.mutation();
+        }
+        function ModAccentColor(accentcolor=null){
+            var objaccentcolor = document.getElementById("caccent_color");
+            var classList=objaccentcolor.classList;
+            var preaccentcolor=objaccentcolor.value;
+            if(preaccentcolor.length==0){
+                if(accentcolor!=null){
+                    classList.add('mdui-color-'+accentcolor+'-accent');
+                }
+            }
+            else{
+                if(accentcolor==null){
+                    classList.remove('mdui-color-'+preaccentcolor+'-accent');
+                }
+                else{
+                    classList.replace('mdui-color-'+preaccentcolor+'-accent','mdui-color-'+accentcolor+'-accent');
+                }
+            }
+            objaccentcolor.value = accentcolor;
+            mdui.updateTextFields();
+            mdui.mutation();
+        }
+        function SelectColor(){
+            var scolor = document.getElementsByName("scolor");   
+            var color;
+            for(var i=0;i<scolor.length;i++){
+                if(scolor[i].checked==true){
+                    color=scolor[i].value;
+                    break;
+                }
+            }
+            if(color=="null")
+                ModColor();
+            else
+                ModColor(color);
+        }
+        function SelectAccentColor(){
+            var saccentcolor = document.getElementsByName("saccent_color");   
+            var accentcolor;
+            for(var i=0;i<saccentcolor.length;i++){
+                if(saccentcolor[i].checked==true){
+                    accentcolor=saccentcolor[i].value;
+                    break;
+                }
+            }
+            if(accentcolor=="null")
+                ModAccentColor();
+            else
+                ModAccentColor(accentcolor);
+        }
+        function contestaddapiadd(){
+            var cid = document.getElementById("cid").value;    
+            var cname = document.getElementById("cname").value;    
+            var enable = document.getElementById("enable").checked;
+            if(enable)enable=1;else enable=0;
+            var min_max_mode = document.getElementById("min_max_mode").checked;
+            if(min_max_mode)min_max_mode=1;else min_max_mode=0;
+            var ccolor = document.getElementById("ccolor").value;    
+            var caccent_color = document.getElementById("caccent_color").value;    
+            httpPost2('/admin/contestaddapiadd',{'cid':cid,'min_max_mode':min_max_mode,'enable':enable,'cname':cname,'ccolor':ccolor,'caccent_color':caccent_color});
+        }
+    </script>
+
+
+
+
+{include file="admin/tail" /}

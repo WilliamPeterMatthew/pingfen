@@ -1,0 +1,155 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">分数列表</div>
+            <div class="mdui-card-primary-subtitle">为尽可能保障比赛公平，<b>比赛后台无法直接修改分数</b>，仅能删除。如需修改，请通过数据库后台或删除分数后通过评委端重新打分。</div>
+        </div>
+        <div class="mdui-card-content">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right" onclick="pointsapiexport()">
+                <i class="mdui-icon material-icons">file_download</i>
+                导出分数
+            </button>
+            <br>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable mdui-table-selectable">
+                    <thead>
+                        <tr>
+                            <th>操作<br>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" mdui-dialog="{target: '#submitdel'}">
+                                    <i class="mdui-icon material-icons">delete_sweep</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="multidel()">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>选手序号<br>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='pid'&&$points_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('pid','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='pid'&&$points_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('pid','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>评委序号<br>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='jid'&&$points_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('jid','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='jid'&&$points_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('jid','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>打分<br>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='point'&&$points_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('point','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='point'&&$points_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('point','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>是否最高/最低分<br>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='type'&&$points_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('type','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $points_order_key=='type'&&$points_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="pointsapiorder('type','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th class="mdui-text-center">
+                                是否启用<br>
+                                <font size="1">与对应评委的状态相同</font>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $points as $v}
+                        <tr id="pointlist" name="pointlist" pid="{$v['pid']}" jid="{$v['jid']}">
+                            <td class="mdui-valign">
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-dialog="{target: '#submitdel{$v['pid']}-{$v['jid']}'}">
+                                    <i class="mdui-icon material-icons">delete</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel{$v['pid']}-{$v['jid']}">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="singledel({$v['pid']},{$v['jid']})">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{$v['pid']}</td>
+                            <td>{$v['jid']}</td>
+                            <td>{$v['point']}</td>
+                            <td>{$v['type']}</td>
+                            <td class="mdui-text-center">
+                                <label class="mdui-switch">
+                                    <input type="checkbox"{if $v['enable']} checked{/if} disabled/>
+                                    <i class="mdui-switch-icon"></i>
+                                </label>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'points');
+        }
+        function MsgFunc(){
+            
+        }
+        function singledel(pid,jid){
+            var dellist='[{"pid":'+pid+',"jid":'+jid+'}]';
+            pointsapidel(dellist);
+        }
+        function multidel(){
+            var dellist='[';
+            var pointlist = document.getElementsByName("pointlist");   
+            for(var i=0;i<pointlist.length;i++){
+                if(pointlist[i].className=="mdui-table-row-selected"){
+                    if(dellist.length!=1)dellist+=',';
+                    dellist+='{"pid":'+pointlist[i].getAttribute('pid')+',"jid":'+pointlist[i].getAttribute('jid')+'}';
+                }
+            }
+            dellist+=']';
+            if(dellist.length==2){
+                mdui.alert("未选中任何行", "删除错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            pointsapidel(dellist);
+        }
+        function pointsapidel(dellist){
+            httpPost('/contest{$cid}/admin/pointsapidel',{'dellist':dellist});
+        }
+        function pointsapiorder(points_order_key,points_order_by){
+            httpPost('/contest{$cid}/admin/pointsapiorder',{'points_order_key':points_order_key,'points_order_by':points_order_by});
+        }
+        function pointsapiexport(){
+            window.open('/contest{$cid}/admin/pointsapiexport');
+        }
+    </script>
+
+
+
+
+{include file="control/tail" /}

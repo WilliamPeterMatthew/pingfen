@@ -1,0 +1,283 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">评委页面</div>
+            <div class="mdui-card-primary-subtitle">目前的页面是 {switch $judger_page}
+                {case wait }等待评分: {$judger_page_content}{/case}
+                {case score }正在评分: {$judger_page_content}{/case}
+                {case end }结束评分{/case}
+            {/switch} 。<br>下一个页面是 {switch $judger_next_page}
+                {case wait }等待评分: {$judger_next_page_content}{/case}
+                {case score }正在评分: {$judger_next_page_content}{/case}
+                {case end }结束评分{/case}
+            {/switch} 。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-row-md-3">
+                <div class="mdui-col">
+                    <label class="mdui-radio"><input type="radio" name="judger_step_page" id="judger_step_page" value="wait" {if $judger_page=="wait"}checked{/if}><i class="mdui-radio-icon"></i>等待评分</label>
+                </div>
+                <div class="mdui-col">
+                    <label class="mdui-radio"><input type="radio" name="judger_step_page" id="judger_step_page" value="score" {if $judger_page=="score"}checked{/if}><i class="mdui-radio-icon"></i>正在评分</label>
+                </div>
+                <div class="mdui-col">
+                    <label class="mdui-radio"><input type="radio" name="judger_step_page" id="judger_step_page" value="end" {if $judger_page=="end"}checked{/if}><i class="mdui-radio-icon"></i>结束评分</label>
+                </div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">评委页面内容</label>
+                <input class="mdui-textfield-input" id="judger_step_page_content" name="judger_step_page_content" type="text" pattern="([0-9]*|^[0-9]([0-9]|,)*[0-9]$)" />
+            </div>
+            页面内容为选手ID，多个选手ID间用英文半角逗号“,”分隔。<br>
+            结束评分页面无需页面内容。
+        </div>
+        <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right mdui-btn-raised" onclick="controlapijudger()">提交再下一个页面并切换到下一个页面</button>
+        </div>
+    </div>
+    <br>
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">屏幕页面</div>
+            <div class="mdui-card-primary-subtitle">目前的页面是 {switch $screen_page}
+                {case background }背景{/case}
+                {case group }分组: {$screen_page_content}{/case}
+                {case view }详细: {$screen_page_content}{/case}
+                {case rank }排名: {$screen_page_content}{/case}
+            {/switch} 。<br>背景页面的图片和其他三个页面的背景图片在比赛设置里修改。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-row-md-4">
+                <div class="mdui-col">
+                    <label class="mdui-radio"><input type="radio" name="screen_step_page" id="screen_step_page" value="background" {if $screen_page=="background"}checked{/if}><i class="mdui-radio-icon"></i>背景</label>
+                </div>
+                <div class="mdui-col">
+                    <label class="mdui-radio"><input type="radio" name="screen_step_page" id="screen_step_page" value="group" {if $screen_page=="group"}checked{/if}><i class="mdui-radio-icon"></i>分组</label>
+                </div>
+                <div class="mdui-col">
+                    <label class="mdui-radio"><input type="radio" name="screen_step_page" id="screen_step_page" value="view" {if $screen_page=="view"}checked{/if}><i class="mdui-radio-icon"></i>详细</label>
+                </div>
+                <div class="mdui-col">
+                    <label class="mdui-radio"><input type="radio" name="screen_step_page" id="screen_step_page" value="rank" {if $screen_page=="rank"}checked{/if}><i class="mdui-radio-icon"></i>排名</label>
+                </div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">屏幕页面内容</label>
+                <input class="mdui-textfield-input" id="screen_step_page_content" name="screen_step_page_content" type="text" pattern="([0-9]*|^[0-9]([0-9]|,)*[0-9]$)" />
+            </div>
+            页面内容为选手ID，多个选手ID间用英文半角逗号“,”分隔。<br>
+            背景页面无需页面内容。
+        </div>
+        <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right mdui-btn-raised" onclick="controlapiscreen()">提交并切换到下一个页面</button>
+        </div>
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container">
+    {if $judger_page=="score"}
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">评分状态</div>
+            <div class="mdui-card-primary-subtitle">正在对选手 {$judger_page_content} 评分。</div>
+        </div>
+        <div class="mdui-card-content" id="score_status" name="score_status">
+            <!--{foreach $score_status as $v}-->
+            <!--选手{$v['pid']}的评分状态：<br>-->
+            <!--{foreach $v['judgers'] as $u}-->
+            <!--<div class="mdui-chip mdui-color-{if $u['scored']}green{else/}red{/if}-300">-->
+            <!--    <span class="mdui-chip-icon mdui-text-color-white mdui-color-{if $u['scored']}green{else/}red{/if}">{$u['jid']}</span>-->
+            <!--    <span class="mdui-chip-title mdui-text-color-white">{if $u['scored']}已评分{else/}未评分{/if}</span>-->
+            <!--</div>-->
+            <!--{/foreach}-->
+            <!--<br>-->
+            <!--{/foreach}-->
+        </div>
+    </div>
+    <br>
+    {/if}
+    {if $judger_page=="end"}
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">计算排名</div>
+            <div class="mdui-card-primary-subtitle">{if $ranked}所有选手的排名均已计算。{else/}有选手的排名未计算。{/if}</div>
+        </div>
+        <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right mdui-btn-raised" onclick="controlapicalc()">计算</button>
+        </div>
+    </div>
+    <br>
+    {/if}
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'control');
+            {if $judger_page=="score"}
+            scoreStatus();
+            setInterval("scoreStatus()",3000);
+            {/if}
+            setInterval("getReload({$cid},'control',{'judger_page':'{$judger_page}','judger_page_content':'{$judger_page_content}','screen_page':'{$screen_page}','screen_page_content':'{$screen_page_content}'})",3000);
+        }
+        function MsgFunc(){
+            
+        }
+        function controlapijudger(){
+            var judger_step_page = document.getElementsByName("judger_step_page");   
+            for(var i=0;i<judger_step_page.length;i++){
+                if(judger_step_page[i].checked==true){
+                    judger_step_page=judger_step_page[i].value;
+                    break;
+                }
+            }
+            var judger_step_page_content;
+            if(judger_step_page!='end')
+            {
+                judger_step_page_content = document.getElementById("judger_step_page_content").value;    
+                if(judger_step_page_content.length==0)
+                {
+                    mdui.alert("请输入正确的评委页面及内容", "修改错误", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+                for(var i=0;i<judger_step_page_content.length;i++){
+                    if(judger_step_page_content[i]&&(judger_step_page_content[i]!=','||i==0||i==judger_step_page_content.length-1)&&(judger_step_page_content[i]<'0'||judger_step_page_content[i]>'9')){
+                        mdui.alert("请输入正确的评委页面及内容", "修改错误", function(){}, {
+                            confirmText: '确认'
+                        });
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                judger_step_page_content = '';
+            }
+            httpPost('/contest{$cid}/admin/controlapijudger',{'judger_step_page':judger_step_page,'judger_step_page_content':judger_step_page_content});
+        }
+        function controlapiscreen(){
+            var screen_step_page = document.getElementsByName("screen_step_page");   
+            for(var i=0;i<screen_step_page.length;i++){
+                if(screen_step_page[i].checked==true){
+                    screen_step_page=screen_step_page[i].value;
+                    break;
+                }
+            }
+            var screen_step_page_content;
+            if(screen_step_page!='background')
+            {
+                screen_step_page_content = document.getElementById("screen_step_page_content").value;    
+                if(screen_step_page_content.length==0)
+                {
+                    mdui.alert("请输入正确的屏幕页面及内容", "修改错误", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+                for(var i=0;i<screen_step_page_content.length;i++){
+                    if(screen_step_page_content[i]&&(screen_step_page_content[i]!=','||i==0||i==screen_step_page_content.length-1)&&(screen_step_page_content[i]<'0'||screen_step_page_content[i]>'9')){
+                        mdui.alert("请输入正确的屏幕页面及内容", "修改错误", function(){}, {
+                            confirmText: '确认'
+                        });
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                screen_step_page_content = '';
+            }
+            httpPost('/contest{$cid}/admin/controlapiscreen',{'screen_step_page':screen_step_page,'screen_step_page_content':screen_step_page_content});
+        }
+        {if $judger_page=="score"}
+        function scoreStatus(){
+            var score_status=document.getElementById("score_status");
+            var httppost;
+            if (window.XMLHttpRequest)
+            {
+                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                httppost=new XMLHttpRequest();
+
+            }else{
+                // IE6, IE5 浏览器执行代码
+                httppost=new ActiveXObject("Microsoft.XMLHTTP");
+            }                
+            httppost.open("POST","/contest{$cid}/admin/controlapigetstatus",true);
+
+            httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+            httppost.onreadystatechange = function () { 
+                if (httppost.readyState == 4) {
+                    if (httppost.status == 200 || httppost.status == 0) { 
+                        console.log(httppost.responseText);
+                        var info = httppost.responseText;
+                        temp =JSON.parse(info);
+                        if (temp.code==0){
+                            var tc=JSON.parse(temp.content);
+                            var intxt="";
+                            for(var i=0;i<tc.length;i++)
+                            {
+                                intxt+=" 选手"+tc[i]['pid']+"的评分状态：<br>";
+                                for(var j=0;j<tc[i]['judgers'].length;j++)
+                                {
+                                    intxt+="<div class=\"mdui-chip mdui-color-";
+                                    if(tc[i]['judgers'][j]['scored'])
+                                        intxt+="green";
+                                    else
+                                        intxt+="red";
+                                    intxt+="-300\"><span class=\"mdui-chip-icon mdui-text-color-white mdui-color-";
+                                    if(tc[i]['judgers'][j]['scored'])
+                                        intxt+="green";
+                                    else
+                                        intxt+="red";
+                                    intxt+="\">"+tc[i]['judgers'][j].jid+"</span><span class=\"mdui-chip-title mdui-text-color-white\">";
+                                    if(tc[i]['judgers'][j]['scored'])
+                                        intxt+="已评分";
+                                    else
+                                        intxt+="未评分";
+                                    intxt+="</span></div> ";
+                                }
+                                intxt+="<br>";
+                            }
+                            console.log(intxt);
+                            score_status.innerHTML=intxt;
+                            mdui.mutation();
+                        }
+                        else{
+                            window.location.reload();
+                        }
+                        
+                    }
+                    console.log(httppost.status);  
+
+                    if (httppost.status >= 300) {
+                        var info = httppost.responseText;
+                        temp =JSON.parse(info);
+                        //mdui.alert(temp.msgcontent, temp.msgtitle);
+                        window.location.reload();
+                    }
+                }
+            }
+            httppost.send();
+        }
+        {/if}
+        {if $judger_page=="end"}
+        function controlapicalc(){
+            httpPost('/contest{$cid}/admin/controlapicalc',{});
+        }
+        {/if}
+    </script>
+
+
+
+
+{include file="control/tail" /}

@@ -1,0 +1,69 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">输入登录名称和登录密码</div>
+            <div class="mdui-card-primary-subtitle">请输入由数字、大小写字母和下划线“_”组成的登录名称和由可打印字符组成的登录密码登录。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">build</i>
+                <label class="mdui-textfield-label">登录名称</label>
+                <input class="mdui-textfield-input" id="loginname" name="loginname" pattern="([0-9]|[A-z]|_)*" type="text" required />
+                <div class="mdui-textfield-error">请输入正确的登录名称</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">keyboard</i>
+                <label class="mdui-textfield-label">登录密码</label>
+                <input class="mdui-textfield-input" id="password" name="password" type="password" required />
+                <div class="mdui-textfield-error">请输入正确的登录密码</div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="loginapilogin()">登录</button>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'login');
+        }
+        function MsgFunc(){
+            
+        }
+        function loginapilogin()
+        {
+            var loginname = document.getElementById("loginname").value;    
+            var password = document.getElementById("password").value;    
+            if(loginname.length==0)
+            {
+                mdui.alert("请输入正确的登录名称", "登录错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            for(var i=0;i<loginname.length;i++){
+                if(loginname[i]&&(loginname[i]<'a'||loginname[i]>'z')&&(loginname[i]<'A'||loginname[i]>'Z')&&(loginname[i]<'0'||loginname[i]>'9')){
+                    mdui.alert("请输入正确的登录名称", "登录错误", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+            }
+            httpPost('/contest{$cid}/admin/loginapilogin',{'loginname':loginname,'password':password});
+        }
+    </script>
+
+
+
+
+{include file="control/tail" /}

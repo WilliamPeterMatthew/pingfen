@@ -1,0 +1,53 @@
+{include file="show/header" /}
+
+<style>
+  .card{
+    margin:20px 0px 20px 60px;
+  }
+</style>
+
+<body class="d-flex h-100 text-center text-white bg-dark">
+  <div class="position-absolute top-50 start-50 translate-middle">
+      <h1 class='text-white text-center' style='font-size:60px'>
+        {$view_content['pid']}号选手{$view_content['pname']}的最终成绩为<span
+          style='font-size:120px;font-weight:bold;color:#fed71a'>{$view_content['point']}</span></h1>   
+      <div class="row row-cols-4 text-center">
+        {foreach $view_content['points'] as $v}
+        {if $v['type']=='max'}
+        <div class="card shadow-sm" style="background-color: rgba(65,174,60,0.8);">
+        {elseif $v['type']=='min'/}
+        <div class="card shadow-sm" style="background-color: rgba(238,63,77,0.8);">
+        {else/}
+        <div class="card shadow-sm" style="background-color: rgba(14,176,201,0.8);">
+        {/if}
+          <div class="card-header py-3">
+            <h2 class="my-0 fw-normal">{$v['jid']}号</h2>
+          </div>
+          <div class="card-body">
+            {if $v['type']=='max'}
+            <h1 class="card-title text-decoration-line-through" style="font-size:70px;">
+            {elseif $v['type']=='min'/}
+            <h1 class="card-title text-decoration-line-through" style="font-size:70px;">
+            {else/}
+            <h1 class="card-title" style="font-size:70px;">
+            {/if}
+            {$v['point']}</h1>
+          </div>
+        </div>
+        {/foreach}
+      </div>
+  </div>
+    <script>
+        window.onload=function()
+        {
+            setInterval("getReload({$cid},'index',{'screen_page':'{$screen_page}','screen_page_content':'{$screen_page_content}'})",3000);
+        }
+        function MsgFunc(){
+            
+        }
+    </script>
+
+
+
+
+{include file="show/tail" /}

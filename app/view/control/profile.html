@@ -1,0 +1,181 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <i class="mdui-icon material-icons">perm_contact_calendar</i>修改管理员名称</div>
+            <div class="mdui-card-primary-subtitle">请输入新的管理员名称。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">现在的管理员名称</label>
+                <input class="mdui-textfield-input" id="anamepre" name="anamepre" type="text" value="{$aname}" disabled/>
+                <div class="mdui-textfield-error">请输入正确的新管理员名称</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">新的管理员名称</label>
+                <input class="mdui-textfield-input" id="aname" name="aname" type="text" required />
+                <div class="mdui-textfield-error">请输入正确的新管理员名称</div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="profileapianame()">提交</button>
+        </div>
+    </div>
+    <br>
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <i class="mdui-icon material-icons">build</i>修改登录名称</div>
+            <div class="mdui-card-primary-subtitle">请输入由数字、大小写字母和下划线“_”组成的新的登录名称。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">现在的登录名称</label>
+                <input class="mdui-textfield-input" id="loginnamepre" name="loginnamepre" type="text" value="{$loginname}" disabled />
+                <div class="mdui-textfield-error">请输入正确新的登录名称</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">新的登录名称</label>
+                <input class="mdui-textfield-input" id="loginname" name="loginname" pattern="([0-9]|[A-z]|_)*" type="text" required />
+                <div class="mdui-textfield-error">请输入正确新的登录名称</div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="profileapiloginname()">提交</button>
+        </div>
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <i class="mdui-icon material-icons">keyboard</i>修改登录密码</div>
+            <div class="mdui-card-primary-subtitle">请输入新的登录密码。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">旧的登录密码</label>
+                <input class="mdui-textfield-input" id="passwordpre" name="passwordpre" type="password" required />
+                <div class="mdui-textfield-error">请输入正确的旧登录密码</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">新的登录密码</label>
+                <input class="mdui-textfield-input" id="password" name="password" type="password" required />
+                <div class="mdui-textfield-error">请输入正确的新登录密码</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">再次输入新的登录密码</label>
+                <input class="mdui-textfield-input" id="passwordcon" name="passwordcon" type="password" required />
+                <div class="mdui-textfield-error">请再次输入正确的新登录密码</div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="profileapipassword()">提交</button>
+        </div>
+    </div>
+    <br>
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <i class="mdui-icon material-icons">dvr</i>权限</div>
+            <div class="mdui-card-primary-subtitle">数字表示可以管理的比赛的ID，多个比赛间用英文半角逗号“,”分隔。<br>-1表示为网站全局管理员，可以管理网站后台和所有比赛。<br>如需修改请到 站点后台 - 管理员列表 选择此管理员进行修改。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">现在的权限</label>
+                <input class="mdui-textfield-input" id="permission" name="permission" type="text" value="{$permission}" disabled />
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'profile');
+        }
+        function MsgFunc(){
+            
+        }
+        function profileapianame()
+        {
+            var aname = document.getElementById("aname").value;    
+            if(aname.length==0)
+            {
+                mdui.alert("请输入正确的新管理员名称", "修改错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            httpPost('/contest{$cid}/admin/profileapianame',{'aname':aname});
+        }
+        function profileapiloginname()
+        {
+            var loginname = document.getElementById("loginname").value;    
+            if(loginname.length==0)
+            {
+                mdui.alert("请输入正确的新登录名称", "修改错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            for(var i=0;i<loginname.length;i++){
+                if(loginname[i]&&(loginname[i]<'a'||loginname[i]>'z')&&(loginname[i]<'A'||loginname[i]>'Z')&&(loginname[i]<'0'||loginname[i]>'9')){
+                    mdui.alert("请输入正确的新登录名称", "修改错误", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+            }
+            httpPost('/contest{$cid}/admin/profileapiloginname',{'loginname':loginname});
+        }
+        function profileapipassword()
+        {
+            var passwordpre = document.getElementById("passwordpre").value;    
+            if(passwordpre.length==0)
+            {
+                mdui.alert("请输入正确的旧登录密码", "修改错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            var password = document.getElementById("password").value;    
+            if(password.length==0)
+            {
+                mdui.alert("请输入正确的新登录密码", "修改错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            var passwordcon = document.getElementById("passwordcon").value;    
+            if(passwordcon.length==0)
+            {
+                mdui.alert("请再次输入正确的新登录密码", "修改错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            if(password!=passwordcon){
+                mdui.alert("两次输入的新密码不一致", "修改错误", function(){}, {
+                    confirmText: '确认'
+                });
+                    return false;
+            }
+            httpPost('/contest{$cid}/admin/profileapipassword',{'passwordpre':passwordpre,'password':password});
+        }
+    </script>
+
+
+
+
+{include file="control/tail" /}

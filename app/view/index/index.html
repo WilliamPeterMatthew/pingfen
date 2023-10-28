@@ -1,0 +1,51 @@
+{include file="index/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">比赛列表<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    {if empty($contests)}
+    <h2>暂无比赛</h2>
+    {else/}
+        {foreach $contests as $v}
+        <div class="mdui-card" style="width:100%;margin:auto;">
+            {if !empty($v['clogo'])}
+            <div class="mdui-card-header">
+                <img class="mdui-card-header-avatar" src="{$v['clogo']}" style="height:64px;min-width:64px;"/>
+            </div>
+            {/if}
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">比赛{$v['cid']} - {$v['cname']}</div>
+                <div class="mdui-card-primary-subtitle">点击下方按钮进入登录界面</div>
+            </div>
+            
+            <div class="mdui-card-actions mdui-valign">
+                <!--<button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-btn-raised" onclick="contest({$v['cid']})">登录比赛</button>-->
+                <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-btn-raised" onclick="contestpage({$v['cid']},'judger')">评委入口</button>
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-raised" onclick="contestpage({$v['cid']},'admin')">管理入口</button>
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-raised" onclick="contestpage({$v['cid']},'moderator')">主持页面</button>
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-raised" onclick="contestpage({$v['cid']},'show')">屏幕页面</button>
+            </div>
+        </div>
+        <br>
+        {/foreach}
+    {/if}
+</div>
+    <script>
+        // function contest(cid){
+        //     var link = "/contest"+cid;
+        //     window.location.assign(link);
+        // }
+        function contestpage(cid,page){
+            var link = "/contest"+cid+'/'+page;
+            window.location.assign(link);
+        }
+    </script>
+
+
+
+
+{include file="index/tail" /}

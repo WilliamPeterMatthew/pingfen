@@ -1,0 +1,151 @@
+<script>
+    function getMsg(AREA){
+        var inputform = "";
+        var httppost;
+        if (window.XMLHttpRequest)
+            httppost=new XMLHttpRequest();
+        else
+            httppost=new ActiveXObject("Microsoft.XMLHTTP");
+        httppost.open("POST","/admin/"+AREA+"apigetmsg",true);
+        httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        httppost.onreadystatechange = function () { 
+            if (httppost.readyState == 4) {
+                if (httppost.status == 200 || httppost.status == 0) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    if (temp.code>0){
+                        mdui.alert(temp.content, temp.title, function(){
+                            MsgFunc();
+                        }, {
+                            confirmText: '确认'
+                        });
+                    }
+                }
+                console.log(httppost.status);  
+
+                if (httppost.status >= 300) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    window.location.reload();
+                }
+            }
+        }
+        httppost.send(inputform);
+    }
+    function getMsg2(AREA,ID){
+        var inputform = "";
+        var httppost;
+        if (window.XMLHttpRequest)
+            httppost=new XMLHttpRequest();
+        else
+            httppost=new ActiveXObject("Microsoft.XMLHTTP");
+        httppost.open("POST","/admin/"+AREA+"apigetmsg"+ID,true);
+        httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        httppost.onreadystatechange = function () { 
+            if (httppost.readyState == 4) {
+                if (httppost.status == 200 || httppost.status == 0) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    if (temp.code>0){
+                        mdui.alert(temp.content, temp.title, function(){
+                            MsgFunc();
+                        }, {
+                            confirmText: '确认'
+                        });
+                    }
+                }
+                console.log(httppost.status);  
+
+                if (httppost.status >= 300) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    window.location.reload();
+                }
+            }
+        }
+        httppost.send(inputform);
+    }
+    function httpPost(URL, PARAMS){
+        var inputform = "";
+        for (var x in PARAMS)
+        {
+            inputform+="&"+x+"="+PARAMS[x];
+        }
+        var httppost;
+        if (window.XMLHttpRequest)
+            httppost=new XMLHttpRequest();
+        else
+            httppost=new ActiveXObject("Microsoft.XMLHTTP");
+        httppost.open("POST",URL,true);
+        httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        httppost.onreadystatechange = function () { 
+            if (httppost.readyState == 4) {
+                // var info = httppost.responseText;
+                // console.log(info);
+                if (httppost.status == 200 || httppost.status == 0) {
+                    window.location.reload();
+                }
+
+                if (httppost.status >= 300) {
+                    window.location.reload();
+                }
+            }
+        }
+        httppost.send(inputform);
+    }
+    function httpPost2(URL, PARAMS){
+        var inputform = "";
+        for (var x in PARAMS)
+        {
+            inputform+="&"+x+"="+PARAMS[x];
+        }
+        var httppost;
+        if (window.XMLHttpRequest)
+            httppost=new XMLHttpRequest();
+        else
+            httppost=new ActiveXObject("Microsoft.XMLHTTP");
+        httppost.open("POST",URL,true);
+        httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        httppost.onreadystatechange = function () { 
+            if (httppost.readyState == 4) {
+                if (httppost.status == 200 || httppost.status == 0) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    if (temp.code>1){
+                        MsgFunc2();
+                    }
+                    else{
+                        MsgFunc2_();
+                    }
+                }
+
+                if (httppost.status >= 300) {
+                    window.location.reload();
+                }
+            }
+        }
+        httppost.send(inputform);
+    }
+    function httpGet(URL){
+        var httpget;
+        if (window.XMLHttpRequest)
+            httpget=new XMLHttpRequest();
+        else
+            httpget=new ActiveXObject("Microsoft.XMLHTTP");
+        httpget.open("GET",URL,true);
+        httpget.onreadystatechange = function () { 
+            if (httpget.readyState == 4) {
+                if (httpget.status == 200 || httpget.status == 0) {
+                    window.location.assign(URL);
+                }
+
+                if (httpget.status >= 300) {
+                    window.location.reload();
+                }
+            }
+        }
+        httpget.send();
+    }
+</script>
+    </body>
+</html>

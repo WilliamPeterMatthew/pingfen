@@ -1,0 +1,214 @@
+{include file="moderator/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">评委页面</div>
+            <div class="mdui-card-primary-subtitle"><h2>目前的页面是 {switch $judger_page}
+                {case wait }等待评分: {$judger_page_content}{/case}
+                {case score }正在评分: {$judger_page_content}{/case}
+                {case end }结束评分{/case}
+            {/switch} 。</h2></div>
+        </div>
+        {if $judger_page=="score"}
+        <div class="mdui-divider"></div>
+        <div class="mdui-card-content" id="score_status" name="score_status">
+            <!--{foreach $score_status as $v}-->
+            <!--选手{$v['pid']}的评分状态：<br>-->
+            <!--{foreach $v['judgers'] as $u}-->
+            <!--<div class="mdui-chip mdui-color-{if $u['scored']}green{else/}red{/if}-300">-->
+            <!--    <span class="mdui-chip-icon mdui-text-color-white mdui-color-{if $u['scored']}green{else/}red{/if}">{$u['jid']}</span>-->
+            <!--    <span class="mdui-chip-title mdui-text-color-white">{if $u['scored']}已评分{else/}未评分{/if}</span>-->
+            <!--</div>-->
+            <!--{/foreach}-->
+            <!--<br>-->
+            <!--{/foreach}-->
+        </div>
+        {/if}
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">屏幕页面</div>
+            <div class="mdui-card-primary-subtitle"><h2>目前的页面是 {switch $screen_page}
+                {case background }背景{/case}
+                {case group }分组: {$screen_page_content}{/case}
+                {case view }详细: {$screen_page_content}{/case}
+                {case rank }排名: {$screen_page_content}{/case}
+            {/switch} 。</h2></div>
+        </div>
+        {if $screen_page=="view"}
+        <div class="mdui-divider"></div>
+        <div class="mdui-card-content" id="view_content" name="view_content">
+            {$view_content['pid']}号选手{$view_content['pname']}的最终成绩为：<font size="6" class="mdui-text-color-yellow-700" style="font-weight:bold;">{$view_content['point']}</font><br>
+            {foreach $view_content['points'] as $v}
+            <div class="mdui-chip mdui-color-{if $v['type']=='min'}red{elseif $v['type']=='max'/}green{else/}blue{/if}-300">
+                <span class="mdui-chip-icon mdui-text-color-white mdui-color-{if $v['type']=='min'}red{elseif $v['type']=='max'/}green{else/}blue{/if}">{$v['jid']}</span>
+                <span class="mdui-chip-title mdui-text-color-white"{if $v['type']=='max'||$v['type']=='min'} style="text-decoration:line-through;"{/if}>{$v['point']}{if $v['type']=='min'}（最高分）{elseif $v['type']=='max'/}（最低分）{/if}</span>
+            </div>
+            {/foreach}
+            <br>
+        </div>
+        {/if}
+        {if $screen_page=="group"}
+        <div class="mdui-divider"></div>
+        <div class="mdui-card-content" id="group_content" name="group_content">
+            <b>小组得分</b><br>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                        <tr>
+                            <th><b class="mdui-text-color-grey-400">选手顺序</b></th>
+                            <th>选手名称</th>
+                            <th>选手序号</th>
+                            <th>选手最终得分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $group_content as $v}
+                        <tr>
+                            <td><b class="mdui-text-color-grey-400">{$v['sequence']}</b></td>
+                            <td>{$v['pname']}</td>
+                            <td>{$v['pid']}</td>
+                            <td>{$v['point']}</td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+        </div>
+        {/if}
+        {if $screen_page=="rank"}
+        <div class="mdui-divider"></div>
+        <div class="mdui-card-content" id="rank_content" name="rank_content">
+            <b>成绩排名</b><br>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                        <tr>
+                            <th><b class="mdui-text-color-yellow-700">选手排名</b></th>
+                            <th>选手名称</th>
+                            <th>选手序号</th>
+                            <th><b class="mdui-text-color-blue-300">选手最终得分</b></th>
+                            <th><b class="mdui-text-color-grey-400">选手顺序</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $rank_content as $v}
+                        <tr>
+                            <td><b class="mdui-text-color-yellow-700">{$v['rank']}</b></td>
+                            <td>{$v['pname']}</td>
+                            <td>{$v['pid']}</td>
+                            <td><b class="mdui-text-color-blue-300">{$v['point']}</b></td>
+                            <td><b class="mdui-text-color-grey-400">{$v['sequence']}</b></td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+        </div>
+        {/if}
+    </div>
+    <br>
+</div>
+<br>
+    <script>
+        window.onload=function()
+        {
+            {if $judger_page=="score"}
+            scoreStatus();
+            setInterval("scoreStatus()",3000);
+            {/if}
+            setInterval("getReload({$cid},'index',{'judger_page':'{$judger_page}','judger_page_content':'{$judger_page_content}','screen_page':'{$screen_page}','screen_page_content':'{$screen_page_content}'})",3000);
+        }
+        function MsgFunc(){
+            
+        }
+        {if $judger_page=="score"}
+        function scoreStatus(){
+            var score_status=document.getElementById("score_status");
+            var httppost;
+            if (window.XMLHttpRequest)
+            {
+                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                httppost=new XMLHttpRequest();
+
+            }else{
+                // IE6, IE5 浏览器执行代码
+                httppost=new ActiveXObject("Microsoft.XMLHTTP");
+            }                
+            httppost.open("POST","/contest{$cid}/moderator/indexapigetstatus",true);
+
+            httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+            httppost.onreadystatechange = function () { 
+                if (httppost.readyState == 4) {
+                    if (httppost.status == 200 || httppost.status == 0) { 
+                        console.log(httppost.responseText);
+                        var info = httppost.responseText;
+                        temp =JSON.parse(info);
+                        if (temp.code==0){
+                            var tc=JSON.parse(temp.content);
+                            var intxt="";
+                            for(var i=0;i<tc.length;i++)
+                            {
+                                intxt+=" 选手"+tc[i]['pid']+"的评分状态：<br>";
+                                for(var j=0;j<tc[i]['judgers'].length;j++)
+                                {
+                                    intxt+="<div class=\"mdui-chip mdui-color-";
+                                    if(tc[i]['judgers'][j]['scored'])
+                                        intxt+="green";
+                                    else
+                                        intxt+="red";
+                                    intxt+="-300\"><span class=\"mdui-chip-icon mdui-text-color-white mdui-color-";
+                                    if(tc[i]['judgers'][j]['scored'])
+                                        intxt+="green";
+                                    else
+                                        intxt+="red";
+                                    intxt+="\">"+tc[i]['judgers'][j].jid+"</span><span class=\"mdui-chip-title mdui-text-color-white\">";
+                                    if(tc[i]['judgers'][j]['scored'])
+                                        intxt+="已评分";
+                                    else
+                                        intxt+="未评分";
+                                    intxt+="</span></div> ";
+                                }
+                                intxt+="<br>";
+                            }
+                            console.log(intxt);
+                            score_status.innerHTML=intxt;
+                            mdui.mutation();
+                        }
+                        else{
+                            window.location.reload();
+                        }
+                        
+                    }
+                    console.log(httppost.status);  
+
+                    if (httppost.status >= 300) {
+                        var info = httppost.responseText;
+                        temp =JSON.parse(info);
+                        //mdui.alert(temp.msgcontent, temp.msgtitle);
+                        window.location.reload();
+                    }
+                }
+            }
+            httppost.send();
+        }
+        {/if}
+    </script>
+
+
+
+
+{include file="moderator/tail" /}

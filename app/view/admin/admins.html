@@ -1,0 +1,149 @@
+{include file="admin/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">管理员列表</div>
+            <div class="mdui-card-primary-subtitle">你可以查看、新增或修改管理员和管理员的信息。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable mdui-table-selectable">
+                    <thead>
+                        <tr>
+                            <th>操作<br>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" mdui-dialog="{target: '#submitdel'}">
+                                    <i class="mdui-icon material-icons">delete_sweep</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="multidel()">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" onclick="adminadd()">
+                                    <i class="mdui-icon material-icons">add</i>
+                                </button>
+                            </th>
+                            <th>管理员序号<br>
+                                <button class="mdui-btn mdui-btn-icon{if $admins_order_key=='aid'&&$admins_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="adminsapiorder('aid','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $admins_order_key=='aid'&&$admins_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="adminsapiorder('aid','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>管理员名称<br>
+                                <button class="mdui-btn mdui-btn-icon{if $admins_order_key=='aname'&&$admins_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="adminsapiorder('aname','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $admins_order_key=='aname'&&$admins_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="adminsapiorder('aname','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>登录名称<br>
+                                <button class="mdui-btn mdui-btn-icon{if $admins_order_key=='loginname'&&$admins_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="adminsapiorder('loginname','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $admins_order_key=='loginname'&&$admins_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="adminsapiorder('loginname','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>是否启用</th>
+                            <th>比赛权限</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $admins as $v}
+                        <tr id="adminlist" name="adminlist" aid="{$v['aid']}">
+                            <td class="mdui-valign">
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-dialog="{target: '#submitdel{$v['aid']}'}">
+                                    <i class="mdui-icon material-icons">delete</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel{$v['aid']}">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="singledel({$v['aid']})">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="adminedit({$v['aid']})">
+                                    <i class="mdui-icon material-icons">edit</i>
+                                </button>
+                            </td>
+                            <td>{$v['aid']}</td>
+                            <td>{$v['aname']}</td>
+                            <td>{$v['loginname']}</td>
+                            <td>
+                                <label class="mdui-switch">
+                                    <input type="checkbox"{if $v['enable']} checked{/if} disabled/>
+                                    <i class="mdui-switch-icon"></i>
+                                </label>
+                            </td>
+                            <td>{$v['permission']}</td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg('admins');
+        }
+        function MsgFunc(){
+            
+        }
+        function singledel(aid){
+            var dellist='['+aid+']';
+            adminsapidel(dellist);
+        }
+        function multidel(){
+            var dellist='[';
+            var adminlist = document.getElementsByName("adminlist");   
+            for(var i=0;i<adminlist.length;i++){
+                if(adminlist[i].className=="mdui-table-row-selected"){
+                    if(dellist.length!=1)dellist+=',';
+                    dellist+=adminlist[i].getAttribute('aid');
+                }
+            }
+            dellist+=']';
+            if(dellist.length==2){
+                mdui.alert("未选中任何行", "删除错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            adminsapidel(dellist);
+        }
+        function adminsapidel(dellist){
+            httpPost('/admin/adminsapidel',{'dellist':dellist});
+        }
+        function adminsapiorder(admins_order_key,admins_order_by){
+            httpPost('/admin/adminsapiorder',{'admins_order_key':admins_order_key,'admins_order_by':admins_order_by});
+        }
+        function adminadd(){
+            window.location.assign('/admin/adminadd');
+        }
+        function adminedit(aid){
+            window.location.assign('/admin/adminedit'+aid);
+        }
+    </script>
+
+
+
+
+{include file="admin/tail" /}

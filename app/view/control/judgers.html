@@ -1,0 +1,227 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">评委列表</div>
+            <div class="mdui-card-primary-subtitle">你可以查看、新增或修改评委和评委的信息。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable mdui-table-selectable">
+                    <thead>
+                        <tr>
+                            <th>操作<br>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" mdui-dialog="{target: '#submitdel'}">
+                                    <i class="mdui-icon material-icons">delete_sweep</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="multidel()">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" onclick="judgeradd()">
+                                    <i class="mdui-icon material-icons">add</i>
+                                </button>
+                            </th>
+                            <th>评委序号<br>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='jid'&&$judgers_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('jid','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='jid'&&$judgers_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('jid','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>评委名称<br>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='jname'&&$judgers_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('jname','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='jname'&&$judgers_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('jname','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>登录码<br>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='logincode'&&$judgers_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('logincode','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='logincode'&&$judgers_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('logincode','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>是否启用</th>
+                            <th>评委页面<br>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='login_page'&&$judgers_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('login_page','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $judgers_order_key=='login_page'&&$judgers_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="judgersapiorder('login_page','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>评委页面内容<br>
+                                同步所有<button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" mdui-dialog="{target: '#submitsyncall'}">
+                                    <i class="mdui-icon material-icons">refresh</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitsyncall">
+                                    <div class="mdui-dialog-title">确认同步吗？</div>
+                                    <div class="mdui-dialog-content">所有评委的页面会立即切换</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="multisync()">同步</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $judgers as $v}
+                        <tr id="judgerlist" name="judgerlist" jid="{$v['jid']}">
+                            <td class="mdui-valign">
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-dialog="{target: '#submitdel{$v['jid']}'}">
+                                    <i class="mdui-icon material-icons">delete</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel{$v['jid']}">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="singledel({$v['jid']})">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="judgeredit({$v['jid']})">
+                                    <i class="mdui-icon material-icons">edit</i>
+                                </button>
+                            </td>
+                            <td>{$v['jid']}</td>
+                            <td>{$v['jname']}</td>
+                            <td class="mdui-valign">
+                                <div id="logincode{$v['jid']}" name="logincode{$v['jid']}">{$v['logincode']}</div>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="copylogincode({$v['jid']})">
+                                    <i class="mdui-icon material-icons">content_copy</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="judgerqrcode({$v['jid']})">
+                                    <i class="mdui-icon material-icons">border_clear</i>
+                                </button></td>
+                            <td>
+                                <label class="mdui-switch">
+                                    <input type="checkbox"{if $v['enable']} checked{/if} disabled/>
+                                    <i class="mdui-switch-icon"></i>
+                                </label>
+                            </td>
+                            <td>{$v['login_page']}</td>
+                            <td>{$v['login_page_content']}
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-dialog="{target: '#submitsync{$v['jid']}'}">
+                                    <i class="mdui-icon material-icons">sync</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitsync{$v['jid']}">
+                                    <div class="mdui-dialog-title">确认同步吗？</div>
+                                    <div class="mdui-dialog-content">{$v['jid']}号评委的页面会立即切换</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="singlesync({$v['jid']})">同步</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'judgers');
+        }
+        function MsgFunc(){
+            
+        }
+        function singlesync(jid){
+            var synclist='['+jid+']';
+            judgersapisync(synclist);
+        }
+        function multisync(){
+            var synclist='[';
+            var judgerlist = document.getElementsByName("judgerlist");   
+            for(var i=0;i<judgerlist.length;i++){
+                if(synclist.length!=1)synclist+=',';
+                synclist+=judgerlist[i].getAttribute('jid');
+            }
+            synclist+=']';
+            judgersapisync(synclist);
+        }
+        function judgersapisync(synclist){
+            httpPost('/contest{$cid}/admin/judgersapisync',{'synclist':synclist});
+        }
+        function singledel(jid){
+            var dellist='['+jid+']';
+            judgersapidel(dellist);
+        }
+        function multidel(){
+            var dellist='[';
+            var judgerlist = document.getElementsByName("judgerlist");   
+            for(var i=0;i<judgerlist.length;i++){
+                if(judgerlist[i].className=="mdui-table-row-selected"){
+                    if(dellist.length!=1)dellist+=',';
+                    dellist+=judgerlist[i].getAttribute('jid');
+                }
+            }
+            dellist+=']';
+            if(dellist.length==2){
+                mdui.alert("未选中任何行", "删除错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            judgersapidel(dellist);
+        }
+        function judgersapidel(dellist){
+            httpPost('/contest{$cid}/admin/judgersapidel',{'dellist':dellist});
+        }
+        function judgersapiorder(judgers_order_key,judgers_order_by){
+            httpPost('/contest{$cid}/admin/judgersapiorder',{'judgers_order_key':judgers_order_key,'judgers_order_by':judgers_order_by});
+        }
+        function judgeradd(){
+            window.location.assign('/contest{$cid}/admin/judgeradd');
+        }
+        function judgeredit(jid){
+            window.location.assign('/contest{$cid}/admin/judgeredit'+jid);
+        }
+        function judgerqrcode(jid){
+            window.location.assign('/contest{$cid}/admin/judgerqrcode'+jid);
+        }
+        function copylogincode(jid){
+            const el = document.getElementById('logincode'+jid);
+            if (document.selection) { // IE
+                const range = document.body.createTextRange();
+                range.moveToElementText(el);
+                range.select();
+            } else if (window.getSelection) { // 非IE
+                const selection = window.getSelection();
+                const range = document.createRange();
+                selection.removeAllRanges();
+                range.selectNodeContents(el);
+                selection.addRange(range);
+            }
+            document.execCommand('copy');
+            mdui.alert("评委"+jid+"的登录码已复制到剪贴板", "复制成功", function(){}, {
+                confirmText: '确认'
+            });
+        }
+    </script>
+
+
+
+
+{include file="control/tail" /}

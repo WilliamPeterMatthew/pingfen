@@ -1,0 +1,367 @@
+{include file="admin/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">站点设置</div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:49%;margin:auto;">
+                <i class="mdui-icon material-icons">book</i>
+                <label class="mdui-textfield-label">站点名称</label>
+                <textarea class="mdui-textfield-input" id="sname" name="sname" type="text">{$sname}</textarea>
+                <div class="mdui-textfield-helper">留空则使用环境变量中的站点名称：{$env_name}</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:49%;margin:auto;">
+                <i class="mdui-icon material-icons">link</i>
+                <label class="mdui-textfield-label">站点域名</label>
+                <textarea class="mdui-textfield-input" id="surl" name="surl" type="text">{$surl}</textarea>
+                <div class="mdui-textfield-helper">留空则使用环境变量中的站点域名：{$env_url}</div>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-valign" style="width:49%;margin:auto;">
+                <div class="mdui-textfield mdui-textfield-floating-label" style="width:69%;margin:auto;">
+                    <i class="mdui-icon material-icons">pie_chart_outlined</i>
+                    <label class="mdui-textfield-label">站点颜色</label>
+                    <textarea class="mdui-textfield-input{notempty name="scolor"} mdui-color-{$scolor}{/notempty}" id="scolor" name="scolor" type="text" disabled>{$scolor}</textarea>
+                    <div class="mdui-textfield-helper">留空则使用环境变量中的站点颜色： <span class="mdui-color-{$env_color} mdui-text-color-{$env_color}">env.</span> {$env_color}</div>
+                </div>
+                <button class="mdui-btn mdui-color-theme-accent mdui-left mdui-ripple mdui-btn-raised" mdui-dialog="{target: '#selectcolor'}">选择颜色</button>
+                <div class="mdui-dialog" id="selectcolor">
+                    <div class="mdui-dialog-title">请选择站点颜色</div>
+                    <div class="mdui-dialog-content">
+                        <div class="mdui-row-xs-1 mdui-row-sm-2 mdui-row-md-3">
+                            <div class="mdui-col">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="scolor" name="scolor" value="null"{empty name="scolor"} checked{/empty}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    留空
+                                </label>
+                            </div>
+                            {foreach $color_list as $v}
+                            <div class="mdui-col mdui-color-{$v} mdui-center">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="scolor" name="scolor" value="{$v}"{if $scolor==$v} checked{/if}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    {$v}
+                                </label>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="mdui-dialog-actions">
+                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="SelectColor()">选择</button>
+                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                    </div>
+                </div>
+                <div style="width:19%;"></div>
+            </div>
+            <div class="mdui-valign" style="width:49%;margin:auto;">
+                <div class="mdui-textfield mdui-textfield-floating-label" style="width:69%;margin:auto;">
+                    <i class="mdui-icon material-icons">pie_chart</i>
+                    <label class="mdui-textfield-label">站点强调色</label>
+                    <textarea class="mdui-textfield-input{notempty name="saccent_color"} mdui-color-{$saccent_color}-accent{/notempty}" id="saccent_color" name="saccent_color" type="text" disabled>{$saccent_color}</textarea>
+                    <div class="mdui-textfield-helper">留空则使用环境变量中的站点强调色： <span class="mdui-color-{$env_accent_color}-accent mdui-text-color-{$env_accent_color}-accent">env.</span> {$env_accent_color}</div>
+                </div>
+                <button class="mdui-btn mdui-color-theme-accent mdui-left mdui-ripple mdui-btn-raised" mdui-dialog="{target: '#selectaccentcolor'}">选择颜色</button>
+                <div class="mdui-dialog" id="selectaccentcolor">
+                    <div class="mdui-dialog-title">请选择站点颜色</div>
+                    <div class="mdui-dialog-content">
+                        <div class="mdui-row-xs-1 mdui-row-sm-2 mdui-row-md-3">
+                            <div class="mdui-col">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="saccent_color" name="saccent_color" value="null"{empty name="saccent_color"} checked{/empty}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    留空
+                                </label>
+                            </div>
+                            {foreach $accent_color_list as $v}
+                            <div class="mdui-col mdui-color-{$v}-accent">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="saccent_color" name="saccent_color" value="{$v}"{if $saccent_color==$v} checked{/if}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    {$v}
+                                </label>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="mdui-dialog-actions">
+                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="SelectAccentColor()">选择</button>
+                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                    </div>
+                </div>
+                <div style="width:19%;"></div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" mdui-dialog="{target: '#submitedit'}">提交</button>
+            <div class="mdui-dialog" id="submitedit">
+                <div class="mdui-dialog-title">确认提交吗？</div>
+                <div class="mdui-dialog-content">这将立即影响数据。</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="settingsapiedit()">提交</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/settingsapiuploadfavicon" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">donut_small</i>修改站点网标</div>
+                <div class="mdui-card-primary-subtitle">站点网标的文件扩展名仅能为ico、jpeg、jpg和png中的一个<br>且文件大小在1MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前的站点网标</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:120px;border:1px dashed white;">
+                        {empty name="sfavicon"}
+                        <font size="6" style="text-align:center;line-height:120px;">使用环境变量→</font>
+                        {/empty}
+                        {notempty name="sfavicon"}
+                        <img src="{$sfavicon}" height="100px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".ico,.jpeg,.jpg,.png" id="imagefavicon" name="imagefavicon" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">环境变量</font>
+                    <div class="mdui-color-grey " style="height:120px;border:1px dashed white;">
+                        <img src="{$env_favicon}" height="100px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用环境变量" onclick="settingsapiusefavicon()" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/settingsapiuploadlogo" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">donut_large</i>修改站点图标</div>
+                <div class="mdui-card-primary-subtitle">站点图标的文件扩展名仅能为jpeg、jpg和png中的一个<br>且文件大小在1MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前的站点图标</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:120px;border:1px dashed white;">
+                        {empty name="slogo"}
+                        <font size="6" style="text-align:center;line-height:120px;">使用环境变量→</font>
+                        {/empty}
+                        {notempty name="slogo"}
+                        <img src="{$slogo}" height="100px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".jpeg,.jpg,.png" id="imagelogo" name="imagelogo" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">环境变量</font>
+                    <div class="mdui-color-grey " style="height:120px;border:1px dashed white;">
+                        <img src="{$env_logo}" height="100px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用环境变量" onclick="settingsapiuselogo()" />
+            </div>
+        </form>
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/settingsapiuploadspic" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">photo_size_select_small</i>修改默认屏幕背景图片</div>
+                <div class="mdui-card-primary-subtitle">默认屏幕背景图片的文件扩展名仅能为jpeg、jpg和png中的一个<br>且文件大小在10MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前默认的屏幕背景图片</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:170px;border:1px dashed white;">
+                        {empty name="sdefault_screen_page_pic"}
+                        <font size="6" style="text-align:center;line-height:170px;">使用环境变量→</font>
+                        {/empty}
+                        {notempty name="sdefault_screen_page_pic"}
+                        <img src="{$sdefault_screen_page_pic}" height="150px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".jpeg,.jpg,.png" id="imagespic" name="imagespic" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">环境变量</font>
+                    <div class="mdui-color-grey " style="height:170px;border:1px dashed white;">
+                        <img src="{$env_default_screen_page_pic}" height="150px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用环境变量" onclick="settingsapiusespic()" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/settingsapiuploadsbgpic" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">photo_size_select_large</i>修改默认屏幕背景页面背景图片</div>
+                <div class="mdui-card-primary-subtitle">默认屏幕背景页面背景图片的文件扩展名仅能为jpeg、jpg和png中的一个<br>且文件大小在10MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前默认的屏幕背景页面背景图片</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:170px;border:1px dashed white;">
+                        {empty name="sdefault_screen_background_page_pic"}
+                        <font size="6" style="text-align:center;line-height:170px;">使用环境变量→</font>
+                        {/empty}
+                        {notempty name="sdefault_screen_background_page_pic"}
+                        <img src="{$sdefault_screen_background_page_pic}" height="150px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".jpeg,.jpg,.png" id="imagesbgpic" name="imagesbgpic" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">环境变量</font>
+                    <div class="mdui-color-grey " style="height:170px;border:1px dashed white;">
+                        <img src="{$env_default_screen_background_page_pic}" height="150px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用环境变量" onclick="settingsapiusesbgpic()" />
+            </div>
+        </form>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg('settings');
+        }
+        function MsgFunc(){
+            
+        }
+        function ModColor(color=null){
+            var objcolor = document.getElementById("scolor");
+            var classList=objcolor.classList;
+            var precolor=objcolor.value;
+            console.log(color);
+            if(precolor.length==0){
+                if(color!=null){
+                    classList.add('mdui-color-'+color);
+                }
+            }
+            else{
+                if(color==null){
+                    classList.remove('mdui-color-'+precolor);
+                }
+                else{
+                    classList.replace('mdui-color-'+precolor,'mdui-color-'+color);
+                }
+            }
+            objcolor.value = color;
+            mdui.updateTextFields();
+            mdui.mutation();
+        }
+        function ModAccentColor(accentcolor=null){
+            var objaccentcolor = document.getElementById("saccent_color");
+            var classList=objaccentcolor.classList;
+            var preaccentcolor=objaccentcolor.value;
+            if(preaccentcolor.length==0){
+                if(accentcolor!=null){
+                    classList.add('mdui-color-'+accentcolor+'-accent');
+                }
+            }
+            else{
+                if(accentcolor==null){
+                    classList.remove('mdui-color-'+preaccentcolor+'-accent');
+                }
+                else{
+                    classList.replace('mdui-color-'+preaccentcolor+'-accent','mdui-color-'+accentcolor+'-accent');
+                }
+            }
+            objaccentcolor.value = accentcolor;
+            mdui.updateTextFields();
+            mdui.mutation();
+        }
+        function SelectColor(){
+            var scolor = document.getElementsByName("scolor");   
+            var color;
+            for(var i=0;i<scolor.length;i++){
+                if(scolor[i].checked==true){
+                    color=scolor[i].value;
+                    break;
+                }
+            }
+            if(color=="null")
+                ModColor();
+            else
+                ModColor(color);
+        }
+        function SelectAccentColor(){
+            var saccentcolor = document.getElementsByName("saccent_color");   
+            var accentcolor;
+            for(var i=0;i<saccentcolor.length;i++){
+                if(saccentcolor[i].checked==true){
+                    accentcolor=saccentcolor[i].value;
+                    break;
+                }
+            }
+            if(accentcolor=="null")
+                ModAccentColor();
+            else
+                ModAccentColor(accentcolor);
+        }
+        function settingsapiedit(){
+            var sname = document.getElementById("sname").value;    
+            var surl = document.getElementById("surl").value;    
+            var scolor = document.getElementById("scolor").value;    
+            var saccent_color = document.getElementById("saccent_color").value;    
+            httpPost('/admin/settingsapiedit',{'sname':sname,'surl':surl,'scolor':scolor,'saccent_color':saccent_color});
+        }
+        function settingsapiusefavicon(){   
+            httpPost('/admin/settingsapiusefavicon',{});
+        }
+        function settingsapiuselogo(){   
+            httpPost('/admin/settingsapiuselogo',{});
+        }
+        function settingsapiusespic(){   
+            httpPost('/admin/settingsapiusespic',{});
+        }
+        function settingsapiusesbgpic(){   
+            httpPost('/admin/settingsapiusesbgpic',{});
+        }
+    </script>
+
+
+
+
+{include file="admin/tail" /}

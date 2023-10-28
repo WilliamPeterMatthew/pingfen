@@ -1,0 +1,149 @@
+{include file="admin/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-icon" mdui-dialog="{target: '#canceledit'}"><i class="mdui-icon material-icons">keyboard_arrow_left</i></button>    修改管理员
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:39%;margin:auto;">
+                <i class="mdui-icon material-icons">bookmark</i>
+                <label class="mdui-textfield-label">管理员序号</label>
+                <textarea class="mdui-textfield-input" id="aid" name="aid" type="text" pattern="[0-9]+" disabled>{$aid}</textarea>
+                <div class="mdui-textfield-helper">不可更改</div>
+                <div class="mdui-textfield-error">不可更改</div>
+            </div>
+            <br>
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:39%;margin:auto;">
+                <i class="mdui-icon material-icons">build</i>
+                <label class="mdui-textfield-label">登录名称</label>
+                <textarea class="mdui-textfield-input" id="loginname" name="loginname" type="text" pattern="([a-z]|[A-Z]|[0-9])*">{$loginname}</textarea>
+                <div class="mdui-textfield-helper">登录名称由数字和大小写字母组成，留空随机生成一个8位的登录名称</div>
+                <div class="mdui-textfield-error">登录名称由数字和大小写字母组成，留空随机生成一个8位的登录名称</div>
+            </div>
+            <br>
+            <div style="width:19%;margin:auto;">是否启用
+                <label class="mdui-switch">
+                    <input id="enable" name="enable" type="checkbox"{if $enable} checked{/if}/>
+                    <i class="mdui-switch-icon"></i>
+                </label>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:99%;margin:auto;">
+                <i class="mdui-icon material-icons">bookmark_border</i>
+                <label class="mdui-textfield-label">管理员名称</label>
+                <textarea class="mdui-textfield-input" id="aname" name="aname" type="text">{$aname}</textarea>
+                <div class="mdui-textfield-helper">此空可留空</div>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:49%;margin:auto;">
+                <i class="mdui-icon material-icons">keyboard</i>
+                <label class="mdui-textfield-label">登录密码</label>
+                <input class="mdui-textfield-input" id="password" name="password" type="password" pattern="([a-z]|[A-Z]|[0-9])*"/>
+                <div class="mdui-textfield-helper">登录密码由数字和大小写字母组成，留空则不改变密码</div>
+                <div class="mdui-textfield-error">登录密码由数字和大小写字母组成，留空则不改变密码</div>
+            </div>
+            <br>
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:49%;margin:auto;">
+                <i class="mdui-icon material-icons">dvr</i>
+                <label class="mdui-textfield-label">权限</label>
+                <textarea class="mdui-textfield-input" id="permission" name="permission" type="text" required>{$permission}</textarea>
+                <div class="mdui-textfield-helper">权限为比赛ID，多个比赛ID间用英文半角逗号“,”分隔，-1表示为网站全局管理员</div>
+                <div class="mdui-textfield-error">权限为比赛ID，多个比赛ID间用英文半角逗号“,”分隔，-1表示为网站全局管理员</div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" mdui-dialog="{target: '#submitedit'}">提交</button>
+            <div class="mdui-dialog" id="canceledit">
+                <div class="mdui-dialog-title">确认返回吗？</div>
+                <div class="mdui-dialog-content">所做的修改不会保存</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="pageback()">确定</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+            <div class="mdui-dialog" id="submitedit">
+                <div class="mdui-dialog-title">确认提交吗？</div>
+                <div class="mdui-dialog-content">提交后不可修改</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="admineditapiedit{$aid}()">提交</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg2('adminedit',{$aid});
+        }
+        function MsgFunc(){
+            
+        }
+        function MsgFunc2(){
+            getMsg2('adminedit',{$aid});
+        }
+        function MsgFunc2_(){
+            window.location.assign('/admin/admins');
+        }
+        function pageback(){
+            httpGet('/admin/admins');
+        }
+        function admineditapiedit{$aid}(){
+            var loginname = document.getElementById("loginname").value;    
+            for(var i=0;i<loginname.length;i++){
+                if((loginname[i]<'a'||loginname[i]>'z')&&(loginname[i]<'A'||loginname[i]>'Z')&&(loginname[i]<'0'||loginname[i]>'9')){
+                    mdui.alert("登录名称由数字和大小写字母组成", "添加失败", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+            }
+            var enable = document.getElementById("enable").checked;
+            if(enable)enable=1;else enable=0;
+            var aname = document.getElementById("aname").value;    
+            var permission = document.getElementById("permission").value;    
+            if(permission.length==0)
+            {
+                mdui.alert("请输入正确的权限", "添加失败", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            for(var i=0;i<permission.length;i++){
+                if(permission[i]&&(permission[i]!=','||i==0||i==permission.length-1)&&(permission[i]<'0'||permission[i]>'9')&&permission[i]!='-'){
+                    mdui.alert("请输入正确的权限", "添加失败", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+            }
+            var password = document.getElementById("password").value;   
+            for(var i=0;i<password.length;i++){
+                if((password[i]<'a'||password[i]>'z')&&(password[i]<'A'||password[i]>'Z')&&(password[i]<'0'||password[i]>'9')){
+                    mdui.alert("登录密码由数字和大小写字母组成", "添加失败", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+            } 
+            httpPost2('/admin/admineditapiedit{$aid}',{'loginname':loginname,'enable':enable,'aname':aname,'permission':permission,'password':password});
+        }
+    </script>
+
+
+
+
+{include file="admin/tail" /}

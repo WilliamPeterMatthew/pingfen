@@ -1,0 +1,406 @@
+{include file="admin/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:99%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-icon" mdui-dialog="{target: '#canceledit'}"><i class="mdui-icon material-icons">keyboard_arrow_left</i></button>    修改比赛
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:39%;margin:auto;">
+                <i class="mdui-icon material-icons">label</i>
+                <label class="mdui-textfield-label">比赛序号</label>
+                <textarea class="mdui-textfield-input" id="cid" name="cid" type="text" pattern="[0-9]+" disabled>{$cid}</textarea>
+                <div class="mdui-textfield-helper">不可更改</div>
+                <div class="mdui-textfield-error">不可更改</div>
+            </div>
+            <br>
+            <div style="width:29%;margin:auto;">是否去掉最低最高分
+                <label class="mdui-switch">
+                    <input id="min_max_mode" name="min_max_mode" type="checkbox"{if $min_max_mode} checked{/if}/>
+                    <i class="mdui-switch-icon"></i>
+                </label>
+            </div>
+            <br>
+            <div style="width:29%;margin:auto;">是否启用
+                <label class="mdui-switch">
+                    <input id="enable" name="enable" type="checkbox"{if $enable} checked{/if}/>
+                    <i class="mdui-switch-icon"></i>
+                </label>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:99%;margin:auto;">
+                <i class="mdui-icon material-icons">label_outline</i>
+                <label class="mdui-textfield-label">比赛名称</label>
+                <textarea class="mdui-textfield-input" id="cname" name="cname" type="text">{$cname}</textarea>
+                <div class="mdui-textfield-helper">留空则使用全局设置项的站点名称：{$site_name}</div>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-valign" style="width:49%;margin:auto;">
+                <div class="mdui-textfield mdui-textfield-floating-label" style="width:69%;margin:auto;">
+                    <i class="mdui-icon material-icons">pie_chart_outlined</i>
+                    <label class="mdui-textfield-label">比赛颜色</label>
+                    <textarea class="mdui-textfield-input{notempty name="ccolor"} mdui-color-{$ccolor}{/notempty}" id="ccolor" name="ccolor" type="text" disabled>{$ccolor}</textarea>
+                    <div class="mdui-textfield-helper">留空则使用全局设置项的站点颜色： <span class="mdui-color-{$site_color} mdui-text-color-{$site_color}">site</span> {$site_color}</div>
+                </div>
+                <button class="mdui-btn mdui-color-theme-accent mdui-left mdui-ripple mdui-btn-raised" mdui-dialog="{target: '#selectcolor'}">选择颜色</button>
+                <div class="mdui-dialog" id="selectcolor">
+                    <div class="mdui-dialog-title">请选择比赛颜色</div>
+                    <div class="mdui-dialog-content">
+                        <div class="mdui-row-xs-1 mdui-row-sm-2 mdui-row-md-3">
+                            <div class="mdui-col">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="scolor" name="scolor" value="null"{empty name="ccolor"} checked{/empty}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    留空
+                                </label>
+                            </div>
+                            {foreach $color_list as $v}
+                            <div class="mdui-col mdui-color-{$v} mdui-center">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="scolor" name="scolor" value="{$v}"{if $ccolor==$v} checked{/if}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    {$v}
+                                </label>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="mdui-dialog-actions">
+                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="SelectColor()">选择</button>
+                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                    </div>
+                </div>
+                <div style="width:19%;"></div>
+            </div>
+            <div class="mdui-valign" style="width:49%;margin:auto;">
+                <div class="mdui-textfield mdui-textfield-floating-label" style="width:69%;margin:auto;">
+                    <i class="mdui-icon material-icons">pie_chart</i>
+                    <label class="mdui-textfield-label">比赛强调色</label>
+                    <textarea class="mdui-textfield-input{notempty name="caccent_color"} mdui-color-{$caccent_color}-accent{/notempty}" id="caccent_color" name="caccent_color" type="text" disabled>{$caccent_color}</textarea>
+                    <div class="mdui-textfield-helper">留空则使用全局设置项的站点强调色： <span class="mdui-color-{$site_accent_color}-accent mdui-text-color-{$site_accent_color}-accent">site</span> {$site_accent_color}</div>
+                </div>
+                <button class="mdui-btn mdui-color-theme-accent mdui-left mdui-ripple mdui-btn-raised" mdui-dialog="{target: '#selectaccentcolor'}">选择颜色</button>
+                <div class="mdui-dialog" id="selectaccentcolor">
+                    <div class="mdui-dialog-title">请选择比赛颜色</div>
+                    <div class="mdui-dialog-content">
+                        <div class="mdui-row-xs-1 mdui-row-sm-2 mdui-row-md-3">
+                            <div class="mdui-col">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="saccent_color" name="saccent_color" value="null"{empty name="caccent_color"} checked{/empty}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    留空
+                                </label>
+                            </div>
+                            {foreach $accent_color_list as $v}
+                            <div class="mdui-col mdui-color-{$v}-accent">
+                                <label class="mdui-radio mdui-m-b-1">
+                                    <input type="radio" id="saccent_color" name="saccent_color" value="{$v}"{if $caccent_color==$v} checked{/if}/>
+                                    <i class="mdui-radio-icon"></i>
+                                    {$v}
+                                </label>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="mdui-dialog-actions">
+                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="SelectAccentColor()">选择</button>
+                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                    </div>
+                </div>
+                <div style="width:19%;"></div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" mdui-dialog="{target: '#submitedit'}">提交</button>
+            <div class="mdui-dialog" id="canceledit">
+                <div class="mdui-dialog-title">确认返回吗？</div>
+                <div class="mdui-dialog-content">所做的修改不会保存</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="pageback()">确定</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+            <div class="mdui-dialog" id="submitedit">
+                <div class="mdui-dialog-title">确认提交吗？</div>
+                <div class="mdui-dialog-content">这将立即影响数据。</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="contesteditapiedit{$cid}()">提交</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/contesteditapiuploadfavicon{$cid}" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">donut_small</i>修改比赛网标</div>
+                <div class="mdui-card-primary-subtitle">比赛网标的文件扩展名仅能为ico、jpeg、jpg和png中的一个<br>且文件大小在1MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前的比赛网标</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:120px;border:1px dashed white;">
+                        {empty name="cfavicon"}
+                        <font size="6" style="text-align:center;line-height:120px;">使用站点网标→</font>
+                        {/empty}
+                        {notempty name="cfavicon"}
+                        <img src="{$cfavicon}" height="100px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".ico,.jpeg,.jpg,.png" id="imagefavicon" name="imagefavicon" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">站点网标</font>
+                    <div class="mdui-color-grey " style="height:120px;border:1px dashed white;">
+                        <img src="{$site_favicon}" height="100px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用站点网标" onclick="contesteditapiusefavicon{$cid}()" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/contesteditapiuploadlogo{$cid}" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">donut_large</i>修改比赛图标</div>
+                <div class="mdui-card-primary-subtitle">比赛图标的文件扩展名仅能为jpeg、jpg和png中的一个<br>且文件大小在1MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前的比赛图标</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:120px;border:1px dashed white;">
+                        {empty name="clogo"}
+                        <font size="6" style="text-align:center;line-height:120px;">使用站点图标→</font>
+                        {/empty}
+                        {notempty name="clogo"}
+                        <img src="{$clogo}" height="100px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".jpeg,.jpg,.png" id="imagelogo" name="imagelogo" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">站点图标</font>
+                    <div class="mdui-color-grey " style="height:120px;border:1px dashed white;">
+                        <img src="{$site_logo}" height="100px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用站点图标" onclick="contesteditapiuselogo{$cid}()" />
+            </div>
+        </form>
+    </div>
+    <br>
+</div>
+<br>
+<div class="mdui-container mdui-valign">
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/contesteditapiuploadspic{$cid}" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">photo_size_select_small</i>修改屏幕背景图片</div>
+                <div class="mdui-card-primary-subtitle">屏幕背景图片的文件扩展名仅能为jpeg、jpg和png中的一个<br>且文件大小在10MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前的屏幕背景图片</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:170px;border:1px dashed white;">
+                        {empty name="screen_page_pic"}
+                        <font size="6" style="text-align:center;line-height:170px;">使用默认图片→</font>
+                        {/empty}
+                        {notempty name="screen_page_pic"}
+                        <img src="{$screen_page_pic}" height="150px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".jpeg,.jpg,.png" id="imagespic" name="imagespic" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">默认屏幕背景图片</font>
+                    <div class="mdui-color-grey " style="height:170px;border:1px dashed white;">
+                        <img src="{$default_screen_page_pic}" height="150px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用默认图片" onclick="contesteditapiusespic{$cid}()" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="mdui-card" style="width:49%;margin:auto;">
+        <form action="/admin/contesteditapiuploadsbgpic{$cid}" enctype="multipart/form-data" method="post">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">
+                    <i class="mdui-icon material-icons">photo_size_select_large</i>修改屏幕背景页面背景图片</div>
+                <div class="mdui-card-primary-subtitle">屏幕背景页面背景图片的文件扩展名仅能为jpeg、jpg和png中的一个<br>且文件大小在10MB以内</div>
+            </div>
+            <div class="mdui-card-content mdui-valign" style="text-align:center;">
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">当前的屏幕背景页面背景图片</font>
+                    <div class="mdui-color-grey mdui-text-color-white" style="height:170px;border:1px dashed white;">
+                        {empty name="screen_background_page_pic"}
+                        <font size="6" style="text-align:center;line-height:170px;">使用默认图片→</font>
+                        {/empty}
+                        {notempty name="screen_background_page_pic"}
+                        <img src="{$screen_background_page_pic}" height="150px" style="margin:10px;">
+                        {/notempty}
+                    </div>
+                    <input type="file" accept=".jpeg,.jpg,.png" id="imagesbgpic" name="imagesbgpic" style="height:25px;margin:10px;"/>
+                </div>
+                <div style="width:50%;">
+                    <font size="4" style="margin:10px">默认屏幕背景页面背景图片</font>
+                    <div class="mdui-color-grey " style="height:170px;border:1px dashed white;">
+                        <img src="{$default_screen_background_page_pic}" height="150px" style="margin:10px;">
+                    </div>
+                    <div style="height:45px;"></div>
+                </div>
+            </div>
+            <div class="mdui-card-actions mdui-valign">
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="submit" value="上传已选文件" />
+                <input class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" type="button" value="使用默认图片" onclick="contesteditapiusesbgpic{$cid}()" />
+            </div>
+        </form>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg2('contestedit',{$cid});
+        }
+        function MsgFunc(){
+            
+        }
+        function MsgFunc2(){
+            getMsg2('contestedit',{$cid});
+        }
+        function MsgFunc2_(){
+            window.location.assign('/admin/contests');
+        }
+        function pageback(){
+            httpGet('/admin/contests');
+        }
+        function ModColor(color=null){
+            var objcolor = document.getElementById("ccolor");
+            var classList=objcolor.classList;
+            var precolor=objcolor.value;
+            console.log(color);
+            if(precolor.length==0){
+                if(color!=null){
+                    classList.add('mdui-color-'+color);
+                }
+            }
+            else{
+                if(color==null){
+                    classList.remove('mdui-color-'+precolor);
+                }
+                else{
+                    classList.replace('mdui-color-'+precolor,'mdui-color-'+color);
+                }
+            }
+            objcolor.value = color;
+            mdui.updateTextFields();
+            mdui.mutation();
+        }
+        function ModAccentColor(accentcolor=null){
+            var objaccentcolor = document.getElementById("caccent_color");
+            var classList=objaccentcolor.classList;
+            var preaccentcolor=objaccentcolor.value;
+            if(preaccentcolor.length==0){
+                if(accentcolor!=null){
+                    classList.add('mdui-color-'+accentcolor+'-accent');
+                }
+            }
+            else{
+                if(accentcolor==null){
+                    classList.remove('mdui-color-'+preaccentcolor+'-accent');
+                }
+                else{
+                    classList.replace('mdui-color-'+preaccentcolor+'-accent','mdui-color-'+accentcolor+'-accent');
+                }
+            }
+            objaccentcolor.value = accentcolor;
+            mdui.updateTextFields();
+            mdui.mutation();
+        }
+        function SelectColor(){
+            var scolor = document.getElementsByName("scolor");   
+            var color;
+            for(var i=0;i<scolor.length;i++){
+                if(scolor[i].checked==true){
+                    color=scolor[i].value;
+                    break;
+                }
+            }
+            if(color=="null")
+                ModColor();
+            else
+                ModColor(color);
+        }
+        function SelectAccentColor(){
+            var saccentcolor = document.getElementsByName("saccent_color");   
+            var accentcolor;
+            for(var i=0;i<saccentcolor.length;i++){
+                if(saccentcolor[i].checked==true){
+                    accentcolor=saccentcolor[i].value;
+                    break;
+                }
+            }
+            if(accentcolor=="null")
+                ModAccentColor();
+            else
+                ModAccentColor(accentcolor);
+        }
+        function contesteditapiedit{$cid}(){
+            var cname = document.getElementById("cname").value;    
+            var enable = document.getElementById("enable").checked;
+            if(enable)enable=1;else enable=0;
+            var min_max_mode = document.getElementById("min_max_mode").checked;
+            if(min_max_mode)min_max_mode=1;else min_max_mode=0;
+            var ccolor = document.getElementById("ccolor").value;    
+            var caccent_color = document.getElementById("caccent_color").value;    
+            httpPost2('/admin/contesteditapiedit{$cid}',{'min_max_mode':min_max_mode,'enable':enable,'cname':cname,'ccolor':ccolor,'caccent_color':caccent_color});
+        }
+        function contesteditapiusefavicon{$cid}(){   
+            httpPost('/admin/contesteditapiusefavicon{$cid}',{});
+        }
+        function contesteditapiuselogo{$cid}(){   
+            httpPost('/admin/contesteditapiuselogo{$cid}',{});
+        }
+        function contesteditapiusespic{$cid}(){   
+            httpPost('/admin/contesteditapiusespic{$cid}',{});
+        }
+        function contesteditapiusesbgpic{$cid}(){   
+            httpPost('/admin/contesteditapiusesbgpic{$cid}',{});
+        }
+    </script>
+
+
+
+
+{include file="admin/tail" /}

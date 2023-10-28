@@ -1,0 +1,180 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-icon" mdui-dialog="{target: '#canceladd'}"><i class="mdui-icon material-icons">keyboard_arrow_left</i></button>    添加评委
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:39%;margin:auto;">
+                <i class="mdui-icon material-icons">people</i>
+                <label class="mdui-textfield-label">评委序号</label>
+                <textarea class="mdui-textfield-input" id="jid" name="jid" type="text" pattern="[0-9]+"></textarea>
+                <div class="mdui-textfield-helper">评委序号需要为正整数且不能与现有评委重复，留空自动生成</div>
+                <div class="mdui-textfield-error">评委序号需要为正整数且不能与现有评委重复，留空自动生成</div>
+            </div>
+            <br>
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:39%;margin:auto;">
+                <i class="mdui-icon material-icons">assignment_ind</i>
+                <label class="mdui-textfield-label">登录码</label>
+                <textarea class="mdui-textfield-input" id="logincode" name="logincode" type="text" pattern="([a-z]|[A-Z]|[0-9]){8}" maxlength="8"></textarea>
+                <div class="mdui-textfield-helper">登录码长度为八位，由数字和大小写字母组成，留空随机生成</div>
+                <div class="mdui-textfield-error">登录码长度为八位，由数字和大小写字母组成，留空随机生成</div>
+            </div>
+            <br>
+            <div style="width:19%;margin:auto;">是否启用
+                <label class="mdui-switch">
+                    <input id="enable" name="enable" type="checkbox" checked/>
+                    <i class="mdui-switch-icon"></i>
+                </label>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:99%;margin:auto;">
+                <i class="mdui-icon material-icons">people_outline</i>
+                <label class="mdui-textfield-label">评委名称</label>
+                <textarea class="mdui-textfield-input" id="jname" name="jname" type="text"></textarea>
+                <div class="mdui-textfield-helper">此空可留空</div>
+            </div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div class="mdui-valign" style="width:49%;margin:auto;">
+                <div style="width:19%;margin:auto;">
+                    <i class="mdui-icon material-icons">tv</i>评委页面
+                </div>
+                <div class="mdui-row-md-4" style="width:79%;margin:auto;">
+                    <div class="mdui-col">
+                        <label class="mdui-radio"><input type="radio" name="login_page" id="login_page" value="null" checked><i class="mdui-radio-icon"></i>留空</label>
+                    </div>
+                    <div class="mdui-col">
+                        <label class="mdui-radio"><input type="radio" name="login_page" id="login_page" value="wait"><i class="mdui-radio-icon"></i>等待评分</label>
+                    </div>
+                    <div class="mdui-col">
+                        <label class="mdui-radio"><input type="radio" name="login_page" id="login_page" value="score"><i class="mdui-radio-icon"></i>正在评分</label>
+                    </div>
+                    <div class="mdui-col">
+                        <label class="mdui-radio"><input type="radio" name="login_page" id="login_page" value="end"><i class="mdui-radio-icon"></i>结束评分</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="mdui-textfield mdui-textfield-floating-label" style="width:49%;margin:auto;">
+                <i class="mdui-icon material-icons">dvr</i>
+                <label class="mdui-textfield-label">评委页面内容</label>
+                <textarea class="mdui-textfield-input" id="login_page_content" name="login_page_content" type="text"></textarea>
+                <div class="mdui-textfield-helper">页面内容为选手ID，多个选手ID间用英文半角逗号“,”分隔。前项为“留空”或“结束评分”时，本项无作用</div>
+            </div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" mdui-dialog="{target: '#submitadd'}">提交</button>
+            <div class="mdui-dialog" id="canceladd">
+                <div class="mdui-dialog-title">确认返回吗？</div>
+                <div class="mdui-dialog-content">所做的修改不会保存</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="pageback()">确定</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+            <div class="mdui-dialog" id="submitadd">
+                <div class="mdui-dialog-title">确认提交吗？</div>
+                <div class="mdui-dialog-content">提交后不可修改</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="judgeraddapiadd()">提交</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'judgeradd');
+        }
+        function MsgFunc(){
+            
+        }
+        function MsgFunc2(){
+            getMsg({$cid},'judgeradd');
+        }
+        function MsgFunc2_(){
+            window.location.assign('/contest{$cid}/admin/judgers');
+        }
+        function pageback(){
+            httpGet('/contest{$cid}/admin/judgers');
+        }
+        function judgeraddapiadd(){
+            var jid = document.getElementById("jid").value;    
+            var logincode = document.getElementById("logincode").value;    
+            if(logincode.length!=8&&logincode.length!=0){
+                mdui.alert("请输入正确的八位登录码", "添加失败", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }  
+            if(logincode.length==8){
+                for(var i=0;i<8;i++){
+                    if((logincode[i]<'a'||logincode[i]>'z')&&(logincode[i]<'A'||logincode[i]>'Z')&&(logincode[i]<'0'||logincode[i]>'9')){
+                        mdui.alert("请输入正确的八位登录码", "添加失败", function(){}, {
+                            confirmText: '确认'
+                        });
+                        return false;
+                    }
+                }
+            }
+            var enable = document.getElementById("enable").checked;
+            if(enable)enable=1;else enable=0;
+            var jname = document.getElementById("jname").value;    
+            var login_page = document.getElementsByName("login_page");   
+            for(var i=0;i<login_page.length;i++){
+                if(login_page[i].checked==true){
+                    login_page=login_page[i].value;
+                    break;
+                }
+            }
+            var login_page_content;
+            if(login_page!='end'&&login_page!='null')
+            {
+                login_page_content = document.getElementById("login_page_content").value;    
+                if(login_page_content.length==0)
+                {
+                    mdui.alert("请输入正确的评委页面及内容", "添加失败", function(){}, {
+                        confirmText: '确认'
+                    });
+                    return false;
+                }
+                for(var i=0;i<login_page_content.length;i++){
+                    if(login_page_content[i]&&(login_page_content[i]!=','||i==0||i==login_page_content.length-1)&&(login_page_content[i]<'0'||login_page_content[i]>'9')){
+                        mdui.alert("请输入正确的评委页面及内容", "添加失败", function(){}, {
+                            confirmText: '确认'
+                        });
+                        return false;
+                    }
+                }
+            }
+            else if(login_page=='null')
+            {
+                login_page = '';
+                login_page_content = '';
+            }
+            else
+            {
+                login_page_content = '';
+            }
+            httpPost2('/contest{$cid}/admin/judgeraddapiadd',{'jid':jid,'logincode':logincode,'enable':enable,'jname':jname,'login_page':login_page,'login_page_content':login_page_content});
+        }
+    </script>
+
+
+
+
+{include file="control/tail" /}

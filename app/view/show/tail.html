@@ -1,0 +1,93 @@
+<script>
+    function getMsg(CID,AREA){
+        var inputform = "";
+        var httppost;
+        if (window.XMLHttpRequest)
+            httppost=new XMLHttpRequest();
+        else
+            httppost=new ActiveXObject("Microsoft.XMLHTTP");
+        httppost.open("POST","/contest"+CID+"/show/"+AREA+"apigetmsg",true);
+        httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        httppost.onreadystatechange = function () { 
+            if (httppost.readyState == 4) {
+                if (httppost.status == 200 || httppost.status == 0) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    if (temp.code>0){
+                        mdui.alert(temp.content, temp.title, function(){
+                            MsgFunc();
+                        }, {
+                            confirmText: '确认'
+                        });
+                    }
+                }
+                console.log(httppost.status);  
+
+                if (httppost.status >= 300) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    window.location.reload();
+                }
+            }
+        }
+        httppost.send(inputform);
+    }
+    function getReload(CID,AREA,PARAMS){
+        var inputform = "";
+        for (var x in PARAMS)
+        {
+            inputform+="&"+x+"="+PARAMS[x];
+        }
+        var httppost;
+        if (window.XMLHttpRequest)
+            httppost=new XMLHttpRequest();
+        else
+            httppost=new ActiveXObject("Microsoft.XMLHTTP");
+        httppost.open("POST","/contest"+CID+"/show/"+AREA+"apigetreload",true);
+        httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        httppost.onreadystatechange = function () { 
+            if (httppost.readyState == 4) {
+                if (httppost.status == 200 || httppost.status == 0) {
+                    var info = httppost.responseText;
+                    temp =JSON.parse(info);
+                    if(temp.code>0){
+                        window.location.reload();
+                    }
+                }
+
+                if (httppost.status >= 300) {
+                    window.location.reload();
+                }
+            }
+        }
+        httppost.send(inputform);
+    }
+    function httpPost(URL, PARAMS){
+        var inputform = "";
+        for (var x in PARAMS)
+        {
+            inputform+="&"+x+"="+PARAMS[x];
+        }
+        var httppost;
+        if (window.XMLHttpRequest)
+            httppost=new XMLHttpRequest();
+        else
+            httppost=new ActiveXObject("Microsoft.XMLHTTP");
+        httppost.open("POST",URL,true);
+        httppost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        httppost.onreadystatechange = function () { 
+            if (httppost.readyState == 4) {
+                if (httppost.status == 200 || httppost.status == 0) {
+                    window.location.reload();
+                }
+
+                if (httppost.status >= 300) {
+                    window.location.reload();
+                }
+            }
+        }
+        httppost.send(inputform);
+    }
+</script>
+    </body>
+</html>

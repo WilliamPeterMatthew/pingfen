@@ -1,0 +1,194 @@
+{include file="admin/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">比赛列表</div>
+            <div class="mdui-card-primary-subtitle">你可以查看、新增或修改比赛和比赛的信息。</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable mdui-table-selectable">
+                    <thead>
+                        <tr>
+                            <th>操作<br>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" mdui-dialog="{target: '#submitdel'}">
+                                    <i class="mdui-icon material-icons">delete_sweep</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="multidel()">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" onclick="contestadd()">
+                                    <i class="mdui-icon material-icons">add</i>
+                                </button>
+                            </th>
+                            <th>比赛序号<br>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='cid'&&$contests_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('cid','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='cid'&&$contests_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('cid','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>比赛名称<br>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='cname'&&$contests_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('cname','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='cname'&&$contests_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('cname','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>比赛颜色<br>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='ccolor'&&$contests_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('ccolor','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='ccolor'&&$contests_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('ccolor','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>比赛强调色<br>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='caccent_color'&&$contests_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('caccent_color','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $contests_order_key=='caccent_color'&&$contests_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="contestsapiorder('caccent_color','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>是否启用</th>
+                            <th>是否去掉<br>最低最高分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $contests as $v}
+                        <tr id="contestlist" name="contestlist" cid="{$v['cid']}">
+                            <td>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-dialog="{target: '#submitdel{$v['cid']}'}">
+                                    <i class="mdui-icon material-icons">delete</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel{$v['cid']}">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="singledel({$v['cid']})">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="contestedit({$v['cid']})">
+                                    <i class="mdui-icon material-icons">edit</i>
+                                </button>
+                                <div class="mdui-divider"></div>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="contestcontrol({$v['cid']})">
+                                    <i class="mdui-icon material-icons">devices</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="contestsettings({$v['cid']})">
+                                    <i class="mdui-icon material-icons">settings_applications</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="contestpoints({$v['cid']})">
+                                    <i class="mdui-icon material-icons">list</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="contestjudgers({$v['cid']})">
+                                    <i class="mdui-icon material-icons">group</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="contestplayers({$v['cid']})">
+                                    <i class="mdui-icon material-icons">person</i>
+                                </button>
+                            </td>
+                            <td>{$v['cid']}</td>
+                            <td>{$v['cname']}</td>
+                            <td>{notempty name="v['ccolor']"}<span class="mdui-color-{$v['ccolor']} mdui-text-color-{$v['ccolor']}">site</span> {/notempty}{$v['ccolor']}</td>
+                            <td>{notempty name="v['caccent_color']"}<span class="mdui-color-{$v['caccent_color']}-accent mdui-text-color-{$v['caccent_color']}-accent">site</span> {/notempty}{$v['caccent_color']}</td>
+                            <td>
+                                <label class="mdui-switch">
+                                    <input type="checkbox"{if $v['enable']} checked{/if} disabled/>
+                                    <i class="mdui-switch-icon"></i>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="mdui-switch">
+                                    <input type="checkbox"{if $v['min_max_mode']} checked{/if} disabled/>
+                                    <i class="mdui-switch-icon"></i>
+                                </label>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg('contests');
+        }
+        function MsgFunc(){
+            
+        }
+        function singledel(cid){
+            var dellist='['+cid+']';
+            contestsapidel(dellist);
+        }
+        function multidel(){
+            var dellist='[';
+            var contestlist = document.getElementsByName("contestlist");   
+            for(var i=0;i<contestlist.length;i++){
+                if(contestlist[i].className=="mdui-table-row-selected"){
+                    if(dellist.length!=1)dellist+=',';
+                    dellist+=contestlist[i].getAttribute('cid');
+                }
+            }
+            dellist+=']';
+            if(dellist.length==2){
+                mdui.alert("未选中任何行", "删除错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            contestsapidel(dellist);
+        }
+        function contestsapidel(dellist){
+            httpPost('/admin/contestsapidel',{'dellist':dellist});
+        }
+        function contestsapiorder(contests_order_key,contests_order_by){
+            httpPost('/admin/contestsapiorder',{'contests_order_key':contests_order_key,'contests_order_by':contests_order_by});
+        }
+        function contestadd(){
+            window.location.assign('/admin/contestadd');
+        }
+        function contestedit(cid){
+            window.location.assign('/admin/contestedit'+cid);
+        }
+        function contestcontrol(cid){
+            window.open('/contest'+cid+'/admin/control');
+        }
+        function contestsettings(cid){
+            window.open('/contest'+cid+'/admin/settings');
+        }
+        function contestpoints(cid){
+            window.open('/contest'+cid+'/admin/points');
+        }
+        function contestjudgers(cid){
+            window.open('/contest'+cid+'/admin/judgers');
+        }
+        function contestplayers(cid){
+            window.open('/contest'+cid+'/admin/players');
+        }
+    </script>
+
+
+
+
+{include file="admin/tail" /}

@@ -1,0 +1,90 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">
+                <button class="mdui-btn mdui-color-theme mdui-ripple mdui-btn-icon" onclick="history.back()"><i class="mdui-icon material-icons">keyboard_arrow_left</i></button>    评委二维码</div>
+            <div class="mdui-card-primary-subtitle">在这里你可以复制评委的登录地址或下载评委的登录二维码</div>
+        </div>
+        <div class="mdui-card-content" style="width:59%;margin:auto;">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">link</i>
+                <label class="mdui-textfield-label">评委登录地址</label>
+                <textarea class="mdui-textfield-input" id="loginurl" name="loginurl" type="text">{$loginurl}</textarea>
+            </div>
+            <img class="mdui-center" src="{$qrcode}"/>
+            <a class="mdui-center mdui-text-color-theme-accent" href="https://qrbtf.com/" style="text-align:center;text-decoration:none;">想要用更美观的二维码？<br>复制评委登录地址然后点击此处</a>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="copyloginurl()">
+                <i class="mdui-icon material-icons">content_copy</i>
+                复制评委登录地址
+            </button>
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="downloadqrcode()">
+                <i class="mdui-icon material-icons">file_download</i>
+                下载评委登录二维码
+            </button>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg2({$cid},'judgerqrcode',{$jid});
+        }
+        function MsgFunc(){
+            
+        }
+        function MsgFunc2(){
+            getMsg2({$cid},'judgerqrcode',{$jid});
+        }
+        function MsgFunc2_(){
+            window.location.assign('/contest{$cid}/admin/judgers');
+        }
+        function copyloginurl(){
+            const el = document.getElementById('loginurl');
+            el.focus();
+            if (el.setSelectionRange){
+                el.setSelectionRange(0, el.value.length);
+            }else{
+                el.select();
+            }
+            document.execCommand('copy');
+            mdui.alert("评委的登录地址已复制到剪贴板", "复制成功", function(){}, {
+                confirmText: '确认'
+            });
+        }
+        function downloadqrcode(){
+            let imgsrc="{$qrcode}";
+            let name="contest{$cid}-judger{$jid}.png";
+            let image = new Image();
+            image.setAttribute("crossOrigin", "anonymous");
+            image.onload = function() {
+                let canvas = document.createElement("canvas");
+                canvas.width = image.width;
+                canvas.height = image.height;
+                let context = canvas.getContext("2d");
+                context.drawImage(image, 0, 0, image.width, image.height);
+                let url = canvas.toDataURL("image/png"); 
+                let a = document.createElement("a"); 
+                let event = new MouseEvent("click");
+                a.download = name || "photo"; 
+                a.href = url; 
+                a.dispatchEvent(event);
+            }
+            image.src = imgsrc;
+        }
+    </script>
+
+
+
+
+{include file="control/tail" /}

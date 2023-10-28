@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>{if !empty($page_title)}{$page_title} - {/if}{$site_name}</title>
+    <link rel="icon" href="{$site_favicon}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{$site_favicon}" type="image/x-icon"/>
+    {load href="/static/mdui/css/mdui.css" /}
+    {load href="/static/mdui/js/mdui.js" /}
+    {load href="/static/highlight/styles/vs.min.css" /}
+    {load href="/static/highlight/highlight.js" /}
+</head>
+
+<body class="mdui-appbar-with-toolbar  mdui-theme-primary-{$site_color} mdui-theme-accent-{$site_accent_color} mdui-theme-layout-auto">
+    <header class="mdui-appbar mdui-appbar-fixed">
+        <div class="mdui-toolbar mdui-color-theme">
+            <a href="/" target="_self" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '首页'}">
+                <img class="mdui-ripple mdui-ripple-white" src="{$site_logo}" style="max-height:48px;max-width:48px;min-height:36px;min-width:36px;"/>
+            </a>
+            <a href="/" class="mdui-typo-headline mdui-hidden-xs mdui-text-color-white">
+                {$site_name}
+            </a>
+            <div class="mdui-toolbar-spacer"></div>
+            {present name="usage"}
+            <a href="javascript:history.back()" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '上一页'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">keyboard_arrow_left</i></a>
+            {/present}
+            {notpresent name="usage"}
+            <a href="/usage" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '使用手册'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">help</i></a>
+            {/notpresent}
+            <a href="/admin" target="_self" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '全局管理页面'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">settings</i></a>
+        </div>
+        {present name="usage"}
+        <div class="mdui-tab mdui-tab-full-width mdui-color-theme" mdui-tab>
+            <a href="#admin" class="mdui-ripple mdui-ripple-white mdui-tab-active">
+                <i class="mdui-icon material-icons">looks_one</i>
+                <label>管理站点</label>
+            </a>
+            <a href="#pre" class="mdui-ripple mdui-ripple-white">
+                <i class="mdui-icon material-icons">looks_two</i>
+                <label>赛前准备</label>
+            </a>
+            <a href="#control" class="mdui-ripple mdui-ripple-white">
+                <i class="mdui-icon material-icons">looks_3</i>
+                <label>赛时控制</label>
+            </a>
+            <a href="#post" class="mdui-ripple mdui-ripple-white">
+                <i class="mdui-icon material-icons">looks_4</i>
+                <label>赛后工作</label>
+            </a>
+        </div>
+        {/present}
+    </header>

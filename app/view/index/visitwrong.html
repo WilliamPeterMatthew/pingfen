@@ -1,0 +1,28 @@
+{include file="index/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">您的访问有误</div>
+            <div class="mdui-card-primary-subtitle">无法找到对应页面。</div>
+        </div>
+        <div class="mdui-card-content mdui-valign">
+            <div style="font-size:24px;margin: 0 auto;">您可能输入了错误的网址，或者该地址已被禁止访问。</div>
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <button class="mdui-btn mdui-color-theme mdui-ripple mdui-center mdui-btn-raised" onclick="history.back()"><i class="mdui-icon material-icons">keyboard_arrow_left</i> 返回上一页 </button>
+        </div>
+    </div>
+    <br>
+</div>
+
+
+
+
+{include file="index/tail" /}

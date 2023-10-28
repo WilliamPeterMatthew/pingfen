@@ -1,0 +1,171 @@
+{include file="control/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">选手列表</div>
+            <div class="mdui-card-primary-subtitle">你可以查看、新增或修改选手和选手的信息。</div>
+        </div>
+        <div class="mdui-card-content">
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right" onclick="playersapiexport()">
+                <i class="mdui-icon material-icons">file_download</i>
+                导出成绩
+            </button>
+            <br>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable mdui-table-selectable">
+                    <thead>
+                        <tr>
+                            <th>操作<br>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" mdui-dialog="{target: '#submitdel'}">
+                                    <i class="mdui-icon material-icons">delete_sweep</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="multidel()">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" onclick="playeradd()">
+                                    <i class="mdui-icon material-icons">add</i>
+                                </button>
+                            </th>
+                            <th>选手序号<br>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='pid'&&$players_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('pid','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='pid'&&$players_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('pid','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>选手名称<br>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='pname'&&$players_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('pname','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='pname'&&$players_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('pname','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>选手顺序<br>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='sequence'&&$players_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('sequence','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='sequence'&&$players_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('sequence','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>选手最终得分<br>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='point'&&$players_order_by=='asc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('point','asc')">
+                                    <i class="mdui-icon material-icons">expand_less</i>
+                                </button>
+                                <button class="mdui-btn mdui-btn-icon{if $players_order_key=='point'&&$players_order_by=='desc'} mdui-color-theme-accent{/if} mdui-ripple" onclick="playersapiorder('point','desc')">
+                                    <i class="mdui-icon material-icons">expand_more</i>
+                                </button>
+                            </th>
+                            <th>选手排名<br>
+                                <button class="mdui-btn mdui-color-theme-accent mdui-ripple" onclick="playersapicalc()">计算 </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $players as $v}
+                        <tr id="playerlist" name="playerlist" pid="{$v['pid']}">
+                            <td class="mdui-valign">
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-dialog="{target: '#submitdel{$v['pid']}'}">
+                                    <i class="mdui-icon material-icons">delete</i>
+                                </button>
+                                <div class="mdui-dialog" id="submitdel{$v['pid']}">
+                                    <div class="mdui-dialog-title">确认删除吗？</div>
+                                    <div class="mdui-dialog-content">删除后不可恢复</div>
+                                    <div class="mdui-dialog-actions">
+                                        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="singledel({$v['pid']})">删除</button>
+                                        <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                                    </div>
+                                </div>
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="playeredit({$v['pid']})">
+                                    <i class="mdui-icon material-icons">edit</i>
+                                </button>
+                            </td>
+                            <td>{$v['pid']}</td>
+                            <td>{$v['pname']}</td>
+                            <td>{$v['sequence']}</td>
+                            <td>{$v['point']}
+                                <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="playersapiscore({$v['pid']})">
+                                    <i class="mdui-icon material-icons">youtube_searched_for</i>
+                                </button>
+                            </td>
+                            <td>{$v['rank']}</td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'players');
+        }
+        function MsgFunc(){
+            
+        }
+        function playersapicalc(){
+            httpPost('/contest{$cid}/admin/playersapicalc',{});
+        }
+        function playersapiscore(pid){
+            httpPost('/contest{$cid}/admin/playersapiscore',{'pid':pid});
+        }
+        function singledel(pid){
+            var dellist='['+pid+']';
+            playersapidel(dellist);
+        }
+        function multidel(){
+            var dellist='[';
+            var playerlist = document.getElementsByName("playerlist");   
+            for(var i=0;i<playerlist.length;i++){
+                if(playerlist[i].className=="mdui-table-row-selected"){
+                    if(dellist.length!=1)dellist+=',';
+                    dellist+=playerlist[i].getAttribute('pid');
+                }
+            }
+            dellist+=']';
+            if(dellist.length==2){
+                mdui.alert("未选中任何行", "删除错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            playersapidel(dellist);
+        }
+        function playersapidel(dellist){
+            httpPost('/contest{$cid}/admin/playersapidel',{'dellist':dellist});
+        }
+        function playersapiorder(players_order_key,players_order_by){
+            httpPost('/contest{$cid}/admin/playersapiorder',{'players_order_key':players_order_key,'players_order_by':players_order_by});
+        }
+        function playeradd(){
+            window.location.assign('/contest{$cid}/admin/playeradd');
+        }
+        function playeredit(pid){
+            window.location.assign('/contest{$cid}/admin/playeredit'+pid);
+        }
+        function playersapiexport(){
+            window.open('/contest{$cid}/admin/playersapiexport');
+        }
+    </script>
+
+
+
+
+{include file="control/tail" /}

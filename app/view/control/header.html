@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>{if !empty($page_title)}{$page_title} - {/if}{$contest_name}</title>
+    <link rel="icon" href="{$contest_favicon}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{$contest_favicon}" type="image/x-icon"/>
+    {load href="/static/mdui/css/mdui.css" /}
+    {load href="/static/mdui/js/mdui.js" /}
+    {load href="/static/highlight/styles/vs.min.css" /}
+    {load href="/static/highlight/highlight.js" /}
+</head>
+
+<body class="mdui-appbar-with-toolbar  mdui-theme-primary-{$contest_color} mdui-theme-accent-{$contest_accent_color} mdui-theme-layout-auto">
+    <header class="mdui-appbar mdui-appbar-fixed">
+        <div class="mdui-toolbar mdui-color-theme">
+            <a href="/contest{$cid}/admin" target="_self" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '管理页面'}">
+                <img class="mdui-ripple mdui-ripple-white" src="{$contest_logo}" style="max-height:48px;max-width:48px;min-height:36px;min-width:36px;"/>
+            </a>
+            <a href="/contest{$cid}/admin" class="mdui-typo-headline mdui-hidden-xs mdui-text-color-white">
+                {$contest_name}
+            </a>
+            <div class="mdui-toolbar-spacer"></div>
+            {present name="logined"}
+                {present name="profile"}
+                <a href="/contest{$cid}/admin" target="_self" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '管理员页面'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">build</i></a>
+                {/present}
+                {notpresent name="profile"}
+                <a href="/contest{$cid}/admin/profile" target="_self" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '管理员档案'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">perm_contact_calendar</i></a>
+                {/notpresent}
+            <a href="/contest{$cid}/admin/logout" target="_self" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '退出登录'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">exit_to_app</i></a>
+            {/present}
+            {notpresent name="logined"}
+            <a href="/contest{$cid}/show" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '大屏幕页面'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">cast</i></a>
+            <a href="/contest{$cid}/moderator" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '主持人页面'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">mic</i></a>
+            <a href="/contest{$cid}/judger/login" target="_self" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '评委页面'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">account_circle</i></a>
+            {/notpresent}
+            <a href="/usage" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '使用手册'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">help</i></a>
+            <a href="/" target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-tooltip="{content: '首页'}"><i class="mdui-icon mdui-text-color-white-icon material-icons">home</i></a>
+        </div>
+        {present name="tabbar"}
+        <div class="mdui-tab mdui-color-theme" mdui-tab>
+            <a href="/contest{$cid}/admin/control" class="mdui-ripple mdui-ripple-white{if $tabbar == 'control'} mdui-tab-active{/if}">
+                <i class="mdui-icon material-icons">devices</i>
+                <label>现场控制</label>
+            </a>
+            <a href="/contest{$cid}/admin/settings" class="mdui-ripple mdui-ripple-white{if $tabbar == 'settings'} mdui-tab-active{/if}">
+                <i class="mdui-icon material-icons">settings_applications</i>
+                <label>比赛设置</label>
+            </a>
+            <a href="/contest{$cid}/admin/points" class="mdui-ripple mdui-ripple-white{if $tabbar == 'points'} mdui-tab-active{/if}">
+                <i class="mdui-icon material-icons">list</i>
+                <label>分数列表</label>
+            </a>
+            <a href="/contest{$cid}/admin/judgers" class="mdui-ripple mdui-ripple-white{if $tabbar == 'judgers'} mdui-tab-active{/if}">
+                <i class="mdui-icon material-icons">group</i>
+                <label>评委列表</label>
+            </a>
+            <a href="/contest{$cid}/admin/players" class="mdui-ripple mdui-ripple-white{if $tabbar == 'players'} mdui-tab-active{/if}">
+                <i class="mdui-icon material-icons">person</i>
+                <label>选手列表</label>
+            </a>
+        </div>
+        {/present}
+    </header>

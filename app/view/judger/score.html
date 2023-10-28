@@ -1,0 +1,78 @@
+{include file="judger/header" /}
+
+<div class="mdui-container doc-container">
+    <div class="mdui-typo">
+        <h2 class="doc-chapter-title doc-chapter-title-first mdui-text-color-theme">{$page_title}您好<a class="doc-anchor" id="font"></a></h2>
+    </div>
+</div>
+<br>
+<div class="mdui-container">
+    <div class="mdui-card" style="width:100%;margin:auto;">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">请对 {$players[0]['pid']}号选手{$players[0]['pname']} {if $player_length > 1}{volist name="players" id="v" key="i"  offset="1"}{if $i==$player_length-1}和{else/}、{/if} {$v['pid']}号选手{$v['pname']} {/volist}{/if}打分</div>
+            <div class="mdui-card-primary-subtitle">对每位选手仅能提交一次，请确认后再提交。</div>
+        </div>
+        <div class="mdui-card-content">
+            {foreach $players as $v}
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">edit</i>
+                <label class="mdui-textfield-label">{$v['pid']}号选手分数</label>
+                <textarea class="mdui-textfield-input" id="point{$v['pid']}" name="point{$v['pid']}" type="text" pattern="([1-9])|([1-9][0-9])|(100)" required></textarea>
+                <div class="mdui-textfield-helper">{$v['pid']}号选手分数，范围为1~100</div>
+                <div class="mdui-textfield-error">{$v['pid']}号选手分数，范围为1~100</div>
+            </div>
+            {/foreach}
+        </div>
+        <div class="mdui-card-actions mdui-valign">
+            <!--<button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" onclick="submitscore()">提交</button>-->
+            <button class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-center mdui-btn-raised" mdui-dialog="{target: '#submitpoint'}">提交</button>
+            <div class="mdui-dialog" id="submitpoint">
+                <div class="mdui-dialog-title">确认提交吗？</div>
+                <div class="mdui-dialog-content">提交后不可修改</div>
+                <div class="mdui-dialog-actions">
+                    <button class="mdui-btn mdui-color-theme-accent mdui-ripple" mdui-dialog-confirm onclick="scoreapiscore()">提交</button>
+                    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+    <script>
+        window.onload=function()
+        {
+            getMsg({$cid},'score');
+        }
+        function MsgFunc(){
+            scoreapinextpage();
+        }
+        // function submitscore(){
+        //     mdui.confirm('提交后不可修改','确认提交', function(){
+        //         scoreapiscore();
+        //         console.log(1);
+        //     }, function(){}, {
+        //         confirmText: '提交',
+        //         cancelText: '取消'
+        //     });
+        // }
+        function scoreapiscore(){
+            {foreach $players as $v}
+            var point{$v['pid']}=document.getElementById("point{$v['pid']}").value;
+            if(point{$v['pid']}==null||point{$v['pid']}==""||isNaN(point{$v['pid']})||point{$v['pid']}<1||point{$v['pid']}>100){
+                mdui.alert("{$v['pid']}号选手分数，范围为1~100", "评分错误", function(){}, {
+                    confirmText: '确认'
+                });
+                return false;
+            }
+            {/foreach}    
+            httpPost('/contest{$cid}/judger/scoreapiscore',{{foreach $players as $v}"point{$v['pid']}":point{$v['pid']},{/foreach}});
+        }
+        function scoreapinextpage(){
+            httpPost('/contest{$cid}/judger/scoreapinextpage',{});
+        }
+    </script>
+
+
+
+
+{include file="judger/tail" /}
